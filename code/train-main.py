@@ -315,8 +315,8 @@ class Linearformer(nn.Module):
         # Returns all parameters as a single tensor
         return torch.cat([p.view(-1) for p in self.parameters()]).detach().cpu().numpy()
 
-#DEVICE='cuda'
-DEVICE='cuda:'+str(random.randint(0,1))
+DEVICE='cuda'
+#DEVICE='cuda:'+str(random.randint(0,1))
 print(DEVICE)
 class MyAddDataSet(torch.utils.data.Dataset):
     def __init__(self, func, C, diff_vocab=False, eqn_sign=False):

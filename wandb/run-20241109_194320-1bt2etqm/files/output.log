@@ -1,0 +1,21 @@
+Keyboard interrupt. Gracefully exiting...
+Finished.
+tensor([[38.5595, 32.8661],
+        [17.9507, 17.0315],
+        [27.8258, 27.8223],
+        ...,
+        [27.8912, 26.6902],
+        [16.3806, 16.1554],
+        [39.9363, 37.7750]])
+std(med(col)) 0.17058247252404143
+mean(std(row)) 0.17792794113644955
+Traceback (most recent call last):
+  File "/home/shouzheyun/pizza/./code/train-main.py", line 615, in <module>
+    torch.save(model.state_dict(),model_name)
+  File "/opt/conda/envs/pizza/lib/python3.10/site-packages/torch/serialization.py", line 849, in save
+    with _open_zipfile_writer(f) as opened_zipfile:
+  File "/opt/conda/envs/pizza/lib/python3.10/site-packages/torch/serialization.py", line 716, in _open_zipfile_writer
+    return container(name_or_buffer)
+  File "/opt/conda/envs/pizza/lib/python3.10/site-packages/torch/serialization.py", line 687, in __init__
+    super().__init__(torch._C.PyTorchFileWriter(self.name))
+RuntimeError: Parent directory save does not exist.

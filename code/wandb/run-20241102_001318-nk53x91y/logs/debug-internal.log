@@ -1,0 +1,8 @@
+{"time":"2024-11-02T00:13:18.461390529Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-02T00:13:18.461409497Z","level":"INFO","msg":"created symlink","path":"/home/buwei/pizza/code/wandb/run-20241102_001318-nk53x91y/logs/debug-core.log"}
+{"time":"2024-11-02T00:13:18.564161297Z","level":"INFO","msg":"created new stream","id":"nk53x91y"}
+{"time":"2024-11-02T00:13:18.564206685Z","level":"INFO","msg":"stream: started","id":"nk53x91y"}
+{"time":"2024-11-02T00:13:18.564235576Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"nk53x91y"}}
+{"time":"2024-11-02T00:13:18.564452972Z","level":"INFO","msg":"handler: started","stream_id":{"value":"nk53x91y"}}
+{"time":"2024-11-02T00:13:18.564479337Z","level":"INFO","msg":"sender: started","stream_id":"nk53x91y"}
+{"time":"2024-11-02T00:13:18.772604564Z","level":"INFO","msg":"Starting system monitor"}
