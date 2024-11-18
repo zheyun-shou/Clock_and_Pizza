@@ -9,7 +9,7 @@ import random
 
 d_hidden=256
 n_vocab=59
-class MyModelD(nn.Module):
+class MyModelD(nn.Module): # Model δ
     def __init__(self):
         super(MyModelD, self).__init__()
         self.embed = nn.Embedding(n_vocab, d_hidden//2)
@@ -30,7 +30,7 @@ class MyModelD(nn.Module):
         x = self.backdoor(x)
         x = x @ self.unembed.weight.t()
         return x
-class MyModelA(nn.Module):
+class MyModelA(nn.Module): # Model α
     def __init__(self):
         super(MyModelA, self).__init__()
         self.embed = nn.Embedding(n_vocab, d_hidden)
@@ -50,7 +50,7 @@ class MyModelA(nn.Module):
         x = self.backdoor(x)
         x = x @ self.unembed.weight.t()
         return x
-class MyModelX(nn.Module):
+class MyModelX(nn.Module): # Model α′
     def __init__(self):
         super(MyModelX, self).__init__()
         self.embed1 = nn.Embedding(n_vocab, d_hidden)
@@ -70,7 +70,7 @@ class MyModelX(nn.Module):
         x = self.backdoor(x)
         x = x @ self.unembed.weight.t()
         return x
-class MyModelB(nn.Module):
+class MyModelB(nn.Module): # Model β
     def __init__(self):
         super(MyModelB, self).__init__()
         self.embed = nn.Embedding(n_vocab, d_hidden)
@@ -91,7 +91,7 @@ class MyModelB(nn.Module):
         x = self.backdoor(x)
         x = x @ self.unembed.weight.t()
         return x
-class MyModelC(nn.Module):
+class MyModelC(nn.Module): # Model γ
     def __init__(self):
         super(MyModelC, self).__init__()
         self.embed = nn.Embedding(n_vocab, d_hidden)

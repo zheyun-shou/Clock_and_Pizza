@@ -186,7 +186,7 @@ class TransformerBlock(nn.Module):
 # -
 
 # Full transformer
-class Transformer(nn.Module):
+class Transformer(nn.Module): # Model B
     def __init__(self, num_layers, d_vocab, d_model, d_head, num_heads, n_ctx, act_type, attn_coeff, use_cache=False, use_ln=True):
         super().__init__()
         assert 0<=attn_coeff<=1
@@ -247,7 +247,7 @@ class Transformer(nn.Module):
         return torch.cat([p.view(-1) for p in self.parameters()]).detach().cpu().numpy()
 
 
-class Linearformer(nn.Module):
+class Linearformer(nn.Module): # Model A
     def __init__(self, num_layers, d_vocab, d_model, d_head, num_heads, n_ctx, act_type, attn_coeff, use_cache=False, use_ln=True):
         super().__init__()
         print('parameters(L)', num_layers, d_vocab, d_model, d_head, num_heads, n_ctx, act_type, attn_coeff, use_cache, use_ln)
