@@ -223,7 +223,7 @@ while True:
         runid=run_name,
     )
     print(config)
-    result_modadd=train(config)
+    result_modadd = train(config)
     dataset = result_modadd['dataset']
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
     model = result_modadd['model']

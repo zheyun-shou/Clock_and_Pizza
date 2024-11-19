@@ -256,7 +256,7 @@ class Linearformer(nn.Module): # Model A
         self.attn_coeff = attn_coeff
 
         self.embed = Embed(d_vocab, d_model//n_ctx)
-        #self.pos_embed = PosEmbed(n_ctx, d_model)
+        # self.pos_embed = PosEmbed(n_ctx, d_model)
         self.unembed = Unembed(d_vocab, d_model)
         self.use_ln = use_ln
         self.blocks = nn.ModuleList([MyLinear(d_model, act_type) for i in range(num_layers)])
@@ -316,7 +316,7 @@ class Linearformer(nn.Module): # Model A
         return torch.cat([p.view(-1) for p in self.parameters()]).detach().cpu().numpy()
 
 DEVICE='cuda'
-#DEVICE='cuda:'+str(random.randint(0,1))
+# DEVICE='cuda:'+str(random.randint(0,1))
 print(DEVICE)
 class MyAddDataSet(torch.utils.data.Dataset):
     def __init__(self, func, C, diff_vocab=False, eqn_sign=False):
@@ -408,6 +408,9 @@ def run_experiment(config):
     best_test_acc=0.
     perfect_train_time=None
     perfect_test_time=None
+
+    # modification start here
+    embeddings, pos_embeddings = [], []
     pbar = tqdm.tqdm(range(config.get('epoch',10000)))
     gaps=[]
     early_stop_a=2
@@ -472,6 +475,9 @@ def run_experiment(config):
                 acc = (out.argmax(dim=1)==ans).float().mean()
                 norm = sum([torch.sum(p*p).item() for p in model.parameters()])**0.5
                 #sum(p.norm()**2 for p in model.parameters()).sqrt().item()
+                embeddings.append(model.embed.W_E.cpu().detach().numpy())
+                if not useLinear:
+                    pos_embeddings.append(model.unembed.W_U.cpu().detach().numpy())
                 losses.append(loss.item())
                 accs.append(acc.item())
                 losses_val.append(loss_val)
@@ -518,6 +524,8 @@ def run_experiment(config):
         perfect_train_time=perfect_train_time,
         perfect_test_time=perfect_test_time,
         dataset = full_dataset,
+        embeddings = embeddings,
+        pos_embeddings = pos_embeddings,
         run=run
     )
 
@@ -550,7 +558,8 @@ while True:
         d_model=d_model,
         n_layers=n_layers,
         attention_dir='casual',
-        act_fn='GeLU' if random.randint(0,3)==0 else 'ReLU',
+        # act_fn='GeLU' if random.randint(0,3)==0 else 'ReLU',
+        act_fn='ReLU',
         epoch=20000,
         batch_size=C*C,
         lr=1e-3,
@@ -560,8 +569,11 @@ while True:
         runid=run_name,
         diff_vocab=diff_vocab,
         eqn_sign=eqn_sign,
+        use_linear=False,
     )
     result_modadd=run_experiment(config)
+    np.save(os.path.join('./embeddings.npy'), result_modadd['embeddings'])
+    np.save(os.path.join('./pos_embeddings.npy'), result_modadd['pos_embeddings'])
     dataset = result_modadd['dataset']
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
     model = result_modadd['model']
