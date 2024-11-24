@@ -14,6 +14,7 @@ import time
 from pathlib import Path
 import pickle
 import os
+import sys
 
 import matplotlib.pyplot as plt
 import plotly.express as px
@@ -30,6 +31,13 @@ import gc
 # import comet_ml
 import wandb
 import itertools
+
+# find path of the project from the script
+root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(root_path)
+
+from analysis.utils import extract_embeddings
+
 class HookPoint(nn.Module):
     def __init__(self):
         super().__init__()
@@ -410,7 +418,7 @@ def run_experiment(config):
     perfect_test_time=None
 
     # modification start here
-    embeddings, pos_embeddings = [], []
+    embeddings=[]
     pbar = tqdm.tqdm(range(config.get('epoch',10000)))
     gaps=[]
     early_stop_a=2
@@ -475,9 +483,11 @@ def run_experiment(config):
                 acc = (out.argmax(dim=1)==ans).float().mean()
                 norm = sum([torch.sum(p*p).item() for p in model.parameters()])**0.5
                 #sum(p.norm()**2 for p in model.parameters()).sqrt().item()
-                embeddings.append(model.embed.W_E.cpu().detach().numpy())
-                if not useLinear:
-                    pos_embeddings.append(model.unembed.W_U.cpu().detach().numpy())
+
+                # save every 10 epochs
+                if config['save_embeddings'] and i % 10 == 9:
+                    embeddings.append(extract_embeddings(model))
+                
                 losses.append(loss.item())
                 accs.append(acc.item())
                 losses_val.append(loss_val)
@@ -523,16 +533,15 @@ def run_experiment(config):
         best_test_acc=best_test_acc,
         perfect_train_time=perfect_train_time,
         perfect_test_time=perfect_test_time,
-        dataset = full_dataset,
-        embeddings = embeddings,
-        pos_embeddings = pos_embeddings,
+        dataset=full_dataset,
+        embeddings=embeddings,
         run=run
     )
 
 import random
 import string
 
-while True:
+for use_linear in [False, True]:
     letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
     run_name = ''.join(random.choices(letters_and_numbers, k=10))
     print(run_name)
@@ -569,11 +578,16 @@ while True:
         runid=run_name,
         diff_vocab=diff_vocab,
         eqn_sign=eqn_sign,
-        use_linear=False,
+        use_linear=use_linear,
+        save_embeddings=False,
     )
     result_modadd=run_experiment(config)
-    np.save(os.path.join('./embeddings.npy'), result_modadd['embeddings'])
-    np.save(os.path.join('./pos_embeddings.npy'), result_modadd['pos_embeddings'])
+
+    # save embeddings, see analysis.utils.extract_embeddings for details
+    if config['save_embeddings']:
+        embed_path = f'result/model_{"A" if config["use_linear"] else "B"}_embeddings.npz'
+        np.savez_compressed(os.path.join(root_path, embed_path), result_modadd['embeddings'])
+    
     dataset = result_modadd['dataset']
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
     model = result_modadd['model']
@@ -622,12 +636,12 @@ while True:
     run.summary['mean_std_row']=np.mean(sx)
     run.summary['std_mean_col']=np.std(ss)
     run.summary['med_std_row']=np.median(sx)
-    model_name=f'save/model_{run_name}.pt'
+    model_name=os.path.join(root_path, f'code/save/model_{run_name}.pt')
     model=result_modadd['model']
-    torch.save(model.state_dict(),model_name)
+    torch.save(model.state_dict(), model_name)
     import json
     config['func']=None
-    with open(f'save/config_{run_name}.json','w') as f:
+    with open(os.path.join(root_path, f'code/save/config_{run_name}.json'),'w') as f:
         json.dump(config,f)
     run.finish()
 

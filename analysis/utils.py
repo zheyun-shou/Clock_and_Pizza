@@ -2,8 +2,42 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def get_embedding(model):
-    embedding = model.embedding.cpu().detach().numpy()
+def extract_embeddings(model):
+    e, e1, e2, e_pos, e_u = None, None, None, None, None
+    # model a/b/c/d: [embed, unembed]
+    # model x: [embed1, embed2, unembed]
+    # model A: [embed, unembed]
+    # model B: [embed, pos_embed, unembed], pos_embed is 2 * d_model
+    if hasattr(model, 'embed'):
+        if hasattr(model.embed, 'W_E'): 
+            # linear / standard transformer (model A/B)
+            e = model.embed.W_E.cpu().detach().numpy()
+        elif hasattr(model.embed, 'weight'):
+            # model a/b/c/d
+            e = model.embed.weight.data.cpu().detach().numpy()
+    if hasattr(model, 'embed1') and hasattr(model, 'embed2'):
+        # model x
+        e1 = model.embed1.weight.cpu().detach().numpy()
+        e2 = model.embed2.weight.cpu().detach().numpy()
+    if hasattr(model, 'pos_embed'): 
+        # standard transformer (model B)
+        e_pos = model.pos_embed.W_pos.cpu().detach().numpy()
+    if hasattr(model, 'unembed'):
+        if hasattr(model.unembed, 'W_U'):  
+            # linear / standard transformer (model A/B)
+            e_u = model.unembed.W_U.cpu().detach().numpy()
+        elif hasattr(model.unembed, 'weight'):
+            # model a/b/c/d/x
+            e_u = model.unembed.weight.data.cpu().detach().numpy()
+    else:
+        raise ValueError('Model does not have any known embeddings')
+    res = [e, e1, e2, e_pos, e_u]
+    name = ['embed','embed1','embed2','pos_embed','unembed']
+    # replace None and resize array
+    # res = [x for x in res if x is not None]
+    # convert to dictionary
+    res = {name[i]: res[i] for i in range(len(res)) if res[i] is not None}
+    return res
 
 def get_final_circle_freqs(embeddings):
     embedding = embeddings[-1]
