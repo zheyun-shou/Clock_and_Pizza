@@ -216,7 +216,7 @@ def train(config):
 import random
 import string
 
-model_type = 'X' # ['A','B','C','D','X']
+model_type = 'C' # ['A','B','C','D','X']
 assert model_type in ['A','B','C','D','X']
 letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
 run_name = ''.join(random.choices(letters_and_numbers, k=10))

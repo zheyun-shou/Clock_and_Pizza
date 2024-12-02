@@ -16,7 +16,7 @@ from utils import format_subplot, get_final_circle_freqs
 torch.set_default_tensor_type(torch.DoubleTensor)
 
 # %%
-model_types = ['B']
+model_types = ['X']
 embedding_types = ['unembed', 'embed']
 data_path = "./result"
 
