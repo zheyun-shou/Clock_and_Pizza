@@ -216,7 +216,7 @@ def train(config):
 import random
 import string
 
-model_type = 'B' # ['A','B','C','D','X']
+model_type = 'D' # ['A','B','C','D','X']
 assert model_type in ['A','B','C','D','X']
 
 for count in range(5,10):

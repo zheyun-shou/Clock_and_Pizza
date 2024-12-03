@@ -27,13 +27,16 @@ DEVICE='cpu'
 
 # model type
 model_type='A'
+use_transformer = False
 
 # read all the filename in the specified directory, and extract the runid from the filename
 def read_from_json(directory, model_type=None):
+    global use_transformer
     run_ids = []
     for filename in os.listdir(directory):
-        if filename.startswith('config_') and filename.endswith('.json'):
+        if filename.startswith('config_'+model_type+'_repr_trans_') and filename.endswith('.json'):
             config_path = os.path.join(directory, filename)
+            runid = filename[len('config_'):-len('.json')]
             model_path = os.path.join(directory, f'model_{runid}.pt')
             
             if os.path.exists(model_path):
@@ -44,11 +47,14 @@ def read_from_json(directory, model_type=None):
                             print(f"Loading model {runid}, Transformer with constant attention")
                         elif abs(config['attn_coeff']) >= 1e-6 and model_type == 'B':
                             print(f"Loading model {runid}, Transformer")
+                        use_transformer = True
                         run_ids.append(filename[len('config_'):-len('.json')])
                     elif 'model_type' in config:
                         if config['model_type'] in linear_models.keys() and config['model_type'] == model_type.upper():
                             print(f"Loading model {runid}, Model {config['model_type']}")
                             run_ids.append(filename[len('config_'):-len('.json')])
+                            use_transformer = False
+    return run_ids
 
 def gradient_symmetricity(model, xs, C=59):
     tt=0
@@ -134,7 +140,7 @@ if __name__ == '__main__':
 
     # initialize the model
     linear_models={'A':MyModelA,'B':MyModelB,'C':MyModelC,'D':MyModelD,'X':MyModelX}
-    if model_type in linear_models:
+    if not use_transformer:
         model=linear_models[model_type]()
     else:
         model=Transformer(num_layers=config.get('n_layers',1),
