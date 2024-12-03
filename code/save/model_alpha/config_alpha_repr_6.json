@@ -1,0 +1,1 @@
+{"C": 59, "model_type": "A", "n_vocab": 59, "d_model": 256, "d_hidden": 256, "epoch": 20000, "lr": 0.001, "weight_decay": 2.0, "frac": 0.8, "runid": "alpha_repr_6", "save_embeddings": true, "func": null}
