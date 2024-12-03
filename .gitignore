@@ -1,4 +1,4 @@
 *.npy
 *.npz
 *.pyc
-/code/wandb/*
+./code/wandb/*
