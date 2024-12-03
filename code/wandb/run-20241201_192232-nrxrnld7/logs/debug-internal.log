@@ -1,0 +1,17 @@
+{"time":"2024-12-01T19:22:32.670870353Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T19:22:32.670899788Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_192232-nrxrnld7/logs/debug-core.log"}
+{"time":"2024-12-01T19:22:32.89713099Z","level":"INFO","msg":"created new stream","id":"nrxrnld7"}
+{"time":"2024-12-01T19:22:32.89717432Z","level":"INFO","msg":"stream: started","id":"nrxrnld7"}
+{"time":"2024-12-01T19:22:32.897251001Z","level":"INFO","msg":"sender: started","stream_id":"nrxrnld7"}
+{"time":"2024-12-01T19:22:32.89728047Z","level":"INFO","msg":"handler: started","stream_id":{"value":"nrxrnld7"}}
+{"time":"2024-12-01T19:22:32.897208797Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"nrxrnld7"}}
+{"time":"2024-12-01T19:22:33.151088765Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T19:38:49.897566456Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T19:38:49.898083354Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T19:38:50.898191349Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.6345805,"progress":"988B/988B"},{"desc":"uploading output.log","runtime_seconds":0.63457209,"progress":"261B/261B"}],"total_operations":2}}
+{"time":"2024-12-01T19:38:51.228300966Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T19:38:52.445629484Z","level":"INFO","msg":"stream: closing","id":"nrxrnld7"}
+{"time":"2024-12-01T19:38:52.445660625Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"nrxrnld7"}}
+{"time":"2024-12-01T19:38:52.445681618Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"nrxrnld7"}}
+{"time":"2024-12-01T19:38:52.445709541Z","level":"INFO","msg":"sender: closed","stream_id":"nrxrnld7"}
+{"time":"2024-12-01T19:38:52.445748791Z","level":"INFO","msg":"stream: closed","id":"nrxrnld7"}

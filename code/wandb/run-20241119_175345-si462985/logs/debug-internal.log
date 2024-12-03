@@ -1,0 +1,17 @@
+{"time":"2024-11-19T17:53:45.885607181Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-19T17:53:45.885642415Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241119_175345-si462985/logs/debug-core.log"}
+{"time":"2024-11-19T17:53:45.988596783Z","level":"INFO","msg":"created new stream","id":"si462985"}
+{"time":"2024-11-19T17:53:45.988649365Z","level":"INFO","msg":"stream: started","id":"si462985"}
+{"time":"2024-11-19T17:53:45.988760107Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"si462985"}}
+{"time":"2024-11-19T17:53:45.9888713Z","level":"INFO","msg":"handler: started","stream_id":{"value":"si462985"}}
+{"time":"2024-11-19T17:53:45.98889389Z","level":"INFO","msg":"sender: started","stream_id":"si462985"}
+{"time":"2024-11-19T17:53:46.458142099Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-19T18:11:02.839973831Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-19T18:11:02.845951581Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-19T18:11:03.840321895Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading output.log","runtime_seconds":0.56929367,"progress":"303B/303B"},{"desc":"uploading config.yaml","runtime_seconds":0.569276177,"progress":"1004B/1004B"}],"total_operations":2}}
+{"time":"2024-11-19T18:11:04.204671256Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-19T18:11:05.472971923Z","level":"INFO","msg":"stream: closing","id":"si462985"}
+{"time":"2024-11-19T18:11:05.472995622Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"si462985"}}
+{"time":"2024-11-19T18:11:05.473017623Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"si462985"}}
+{"time":"2024-11-19T18:11:05.473106213Z","level":"INFO","msg":"sender: closed","stream_id":"si462985"}
+{"time":"2024-11-19T18:11:05.473118777Z","level":"INFO","msg":"stream: closed","id":"si462985"}

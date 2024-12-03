@@ -1,0 +1,14 @@
+Keyboard interrupt. Gracefully exiting...
+Finished.
+Traceback (most recent call last):
+  File "/home/Zheyun/Clock_and_Pizza/code/train-main.py", line 576, in <module>
+    np.save(os.path.join('./embeddings.npy'), result_modadd['embeddings'])
+  File "/opt/conda/envs/pizza/lib/python3.10/site-packages/numpy/lib/npyio.py", line 542, in save
+    file_ctx = open(file, "wb")
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "/home/Zheyun/Clock_and_Pizza/code/train-main.py", line 576, in <module>
+    np.save(os.path.join('./embeddings.npy'), result_modadd['embeddings'])
+  File "/opt/conda/envs/pizza/lib/python3.10/site-packages/numpy/lib/npyio.py", line 542, in save
+    file_ctx = open(file, "wb")
+KeyboardInterrupt

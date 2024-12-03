@@ -1,0 +1,17 @@
+{"time":"2024-11-30T23:30:43.475751979Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-30T23:30:43.475772608Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241130_233043-9hzb2slv/logs/debug-core.log"}
+{"time":"2024-11-30T23:30:43.578718063Z","level":"INFO","msg":"created new stream","id":"9hzb2slv"}
+{"time":"2024-11-30T23:30:43.578758487Z","level":"INFO","msg":"stream: started","id":"9hzb2slv"}
+{"time":"2024-11-30T23:30:43.57895105Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"9hzb2slv"}}
+{"time":"2024-11-30T23:30:43.57912755Z","level":"INFO","msg":"handler: started","stream_id":{"value":"9hzb2slv"}}
+{"time":"2024-11-30T23:30:43.57914947Z","level":"INFO","msg":"sender: started","stream_id":"9hzb2slv"}
+{"time":"2024-11-30T23:30:43.8252272Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-30T23:48:08.328733263Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-30T23:48:08.329484235Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-30T23:48:09.329197434Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"saving job artifact","runtime_seconds":0.815325878},{"desc":"uploading config.yaml","runtime_seconds":0.600517715,"progress":"990B/990B"},{"desc":"uploading output.log","runtime_seconds":0.600502981,"progress":"260B/260B"}],"total_operations":3}}
+{"time":"2024-11-30T23:48:11.443674524Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-30T23:48:12.815480507Z","level":"INFO","msg":"stream: closing","id":"9hzb2slv"}
+{"time":"2024-11-30T23:48:12.815502211Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"9hzb2slv"}}
+{"time":"2024-11-30T23:48:12.815527107Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"9hzb2slv"}}
+{"time":"2024-11-30T23:48:12.815609194Z","level":"INFO","msg":"sender: closed","stream_id":"9hzb2slv"}
+{"time":"2024-11-30T23:48:12.815625273Z","level":"INFO","msg":"stream: closed","id":"9hzb2slv"}

@@ -255,7 +255,7 @@ class Transformer(nn.Module): # Model B
         return torch.cat([p.view(-1) for p in self.parameters()]).detach().cpu().numpy()
 
 
-class Linearformer(nn.Module): # Model A
+class Linearformer(nn.Module): # Model A???
     def __init__(self, num_layers, d_vocab, d_model, d_head, num_heads, n_ctx, act_type, attn_coeff, use_cache=False, use_ln=True):
         super().__init__()
         print('parameters(L)', num_layers, d_vocab, d_model, d_head, num_heads, n_ctx, act_type, attn_coeff, use_cache, use_ln)
@@ -264,7 +264,8 @@ class Linearformer(nn.Module): # Model A
         self.attn_coeff = attn_coeff
 
         self.embed = Embed(d_vocab, d_model//n_ctx)
-        # self.pos_embed = PosEmbed(n_ctx, d_model)
+        # pos embed is being commented in original code
+        self.pos_embed = PosEmbed(n_ctx, d_model)
         self.unembed = Unembed(d_vocab, d_model)
         self.use_ln = use_ln
         self.blocks = nn.ModuleList([MyLinear(d_model, act_type) for i in range(num_layers)])
@@ -283,7 +284,7 @@ class Linearformer(nn.Module): # Model A
         #print(x.shape)
         #print(x.shape)
         assert len(x.shape)==3 and x.shape[1:]==(1,d_model)
-        #x = self.pos_embed(x)
+        x = self.pos_embed(x)
         for blk in self.blocks:
             x = blk(x)
         x = self.unembed(x)
@@ -377,9 +378,9 @@ def run_experiment(config):
     exp_name=config['name']
     print('parsing func',config['funcs'])
     config['func']=eval(config['funcs'])
-    useLinear=config.get('use_linear',False)
+    #useLinear=config.get('use_linear',False)
     full_dataset = MyAddDataSet(func=config['func'],C=config['C'],diff_vocab=config['diff_vocab'],eqn_sign=config['eqn_sign'])
-    model = (Linearformer if useLinear else Transformer)(
+    model = Transformer(
         num_layers=config.get('n_layers',1),
         num_heads=config['n_heads'],
         d_model=config['d_model'],
@@ -540,24 +541,29 @@ def run_experiment(config):
 
 import random
 import string
+import seaborn as sns
 
-for use_linear in [False, True]:
+for count in range(5,10):
+    count+=1
+    # for use_linear in [False]: # false model B, true model A
     letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
-    run_name = ''.join(random.choices(letters_and_numbers, k=10))
+    #run_name = 'A_repr_'.join(random.choices(letters_and_numbers, k=10))
+    run_name = 'A_repr_trans_'+str(count)
     print(run_name)
     C=59
     n_layers=1
-    if random.randint(0,3):
-        n_layers=random.randint(1,4)
-    frac_coeff=random.uniform(0,1)
+    # if random.randint(0,3):
+    #     n_layers=random.randint(1,4)
+    frac_coeff=0.8
+    # frac_coeff=random.uniform(0,1)
     diff_vocab=0
     eqn_sign=0
-    if random.randint(0,4)==0:
-        diff_vocab=random.randint(0,1)
-        eqn_sign=random.randint(0,1)
+    # if random.randint(0,4)==0:
+    #     diff_vocab=random.randint(0,1)
+    #     eqn_sign=random.randint(0,1)
     d_model=128
-    if random.randint(0,2)==0:
-        d_model=int(2**random.uniform(5,9))
+    # if random.randint(0,2)==0:
+    #     d_model=int(2**random.uniform(5,9))
     print(f'd={d_model}')
     config=dict(
         name='modadd_'+str(C),
@@ -574,18 +580,20 @@ for use_linear in [False, True]:
         lr=1e-3,
         weight_decay=2.,
         frac=0.8,
-        attn_coeff=frac_coeff,
+        # should adjust the attn_coeff
+        # attn_coeff=frac_coeff,
+        attn_coeff=0,
         runid=run_name,
         diff_vocab=diff_vocab,
         eqn_sign=eqn_sign,
-        use_linear=use_linear,
+        # use_linear=use_linear,
         save_embeddings=False,
     )
     result_modadd=run_experiment(config)
 
     # save embeddings, see analysis.utils.extract_embeddings for details
     if config['save_embeddings']:
-        embed_path = f'result/model_{"A" if config["use_linear"] else "B"}_embeddings.npz'
+        embed_path = f'result/model_{"B" if config["attn_coeff"] else "A"}_embeddings.npz'
         np.savez_compressed(os.path.join(root_path, embed_path), result_modadd['embeddings'])
     
     dataset = result_modadd['dataset']
@@ -610,7 +618,7 @@ for use_linear in [False, True]:
                 A,B=int(q[0].item()),int(q[1].item())
                 oc[(A+B)%C][(A-B)%C]=p[0].item()
     # use seaborn to plot the heatmap of oo
-    import seaborn as sns
+    
     run=result_modadd['run']
     oo=np.array(oc)
     dd=np.mean(np.std(oo,axis=0))/np.std(oo.flatten())
@@ -642,7 +650,7 @@ for use_linear in [False, True]:
     import json
     config['func']=None
     with open(os.path.join(root_path, f'code/save/config_{run_name}.json'),'w') as f:
-        json.dump(config,f)
+        json.dump(config,f,separators=(',\n', ': '))
     run.finish()
 
 # !python -m wandb offline

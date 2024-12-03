@@ -1,0 +1,17 @@
+{"time":"2024-12-01T16:37:42.810931226Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T16:37:42.810955568Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_163742-c1o5oa3i/logs/debug-core.log"}
+{"time":"2024-12-01T16:37:42.918343138Z","level":"INFO","msg":"created new stream","id":"c1o5oa3i"}
+{"time":"2024-12-01T16:37:42.918376355Z","level":"INFO","msg":"stream: started","id":"c1o5oa3i"}
+{"time":"2024-12-01T16:37:42.919087428Z","level":"INFO","msg":"handler: started","stream_id":{"value":"c1o5oa3i"}}
+{"time":"2024-12-01T16:37:42.919130408Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"c1o5oa3i"}}
+{"time":"2024-12-01T16:37:42.919280231Z","level":"INFO","msg":"sender: started","stream_id":"c1o5oa3i"}
+{"time":"2024-12-01T16:37:43.192334659Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T17:04:00.96747831Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T17:04:00.968292016Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T17:04:01.972927732Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.62604027,"progress":"988B/988B"},{"desc":"uploading output.log","runtime_seconds":0.626026662,"progress":"260B/260B"}],"total_operations":2}}
+{"time":"2024-12-01T17:04:02.274991079Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T17:04:03.51515139Z","level":"INFO","msg":"stream: closing","id":"c1o5oa3i"}
+{"time":"2024-12-01T17:04:03.515180879Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"c1o5oa3i"}}
+{"time":"2024-12-01T17:04:03.515245764Z","level":"INFO","msg":"sender: closed","stream_id":"c1o5oa3i"}
+{"time":"2024-12-01T17:04:03.515205656Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"c1o5oa3i"}}
+{"time":"2024-12-01T17:04:03.515935083Z","level":"INFO","msg":"stream: closed","id":"c1o5oa3i"}

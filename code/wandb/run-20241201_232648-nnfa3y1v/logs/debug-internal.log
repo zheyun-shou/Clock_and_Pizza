@@ -1,0 +1,17 @@
+{"time":"2024-12-01T23:26:48.972745861Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T23:26:48.972759779Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_232648-nnfa3y1v/logs/debug-core.log"}
+{"time":"2024-12-01T23:26:49.07430426Z","level":"INFO","msg":"created new stream","id":"nnfa3y1v"}
+{"time":"2024-12-01T23:26:49.07434242Z","level":"INFO","msg":"stream: started","id":"nnfa3y1v"}
+{"time":"2024-12-01T23:26:49.074385663Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"nnfa3y1v"}}
+{"time":"2024-12-01T23:26:49.07441323Z","level":"INFO","msg":"sender: started","stream_id":"nnfa3y1v"}
+{"time":"2024-12-01T23:26:49.07443937Z","level":"INFO","msg":"handler: started","stream_id":{"value":"nnfa3y1v"}}
+{"time":"2024-12-01T23:26:49.332880016Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T23:38:05.731139063Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T23:38:05.731712297Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T23:38:06.731740112Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.559538735,"progress":"753B/753B"},{"desc":"uploading output.log","runtime_seconds":0.559532278,"progress":"272B/272B"}],"total_operations":2}}
+{"time":"2024-12-01T23:38:07.125320038Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T23:38:08.328586955Z","level":"INFO","msg":"stream: closing","id":"nnfa3y1v"}
+{"time":"2024-12-01T23:38:08.32861726Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"nnfa3y1v"}}
+{"time":"2024-12-01T23:38:08.328637668Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"nnfa3y1v"}}
+{"time":"2024-12-01T23:38:08.328665862Z","level":"INFO","msg":"sender: closed","stream_id":"nnfa3y1v"}
+{"time":"2024-12-01T23:38:08.328737856Z","level":"INFO","msg":"stream: closed","id":"nnfa3y1v"}

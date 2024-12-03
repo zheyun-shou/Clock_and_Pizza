@@ -1,8 +1,0 @@
-{"time":"2024-11-09T20:01:36.798731658Z","level":"INFO","msg":"using version","core version":"0.18.5"}
-{"time":"2024-11-09T20:01:36.798748824Z","level":"INFO","msg":"created symlink","path":"/home/shouzheyun/pizza/wandb/run-20241109_200136-zuhw3pfm/logs/debug-core.log"}
-{"time":"2024-11-09T20:01:36.901644082Z","level":"INFO","msg":"created new stream","id":"zuhw3pfm"}
-{"time":"2024-11-09T20:01:36.901681159Z","level":"INFO","msg":"stream: started","id":"zuhw3pfm"}
-{"time":"2024-11-09T20:01:36.903484987Z","level":"INFO","msg":"sender: started","stream_id":"zuhw3pfm"}
-{"time":"2024-11-09T20:01:36.903532818Z","level":"INFO","msg":"handler: started","stream_id":{"value":"zuhw3pfm"}}
-{"time":"2024-11-09T20:01:36.903614147Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"zuhw3pfm"}}
-{"time":"2024-11-09T20:01:37.153401258Z","level":"INFO","msg":"Starting system monitor"}

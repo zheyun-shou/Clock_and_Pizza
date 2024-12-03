@@ -1,0 +1,17 @@
+{"time":"2024-11-19T16:40:32.725572246Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-19T16:40:32.7256175Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241119_164032-xinf82zi/logs/debug-core.log"}
+{"time":"2024-11-19T16:40:32.828851805Z","level":"INFO","msg":"created new stream","id":"xinf82zi"}
+{"time":"2024-11-19T16:40:32.828901417Z","level":"INFO","msg":"stream: started","id":"xinf82zi"}
+{"time":"2024-11-19T16:40:32.829202306Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"xinf82zi"}}
+{"time":"2024-11-19T16:40:32.829479731Z","level":"INFO","msg":"handler: started","stream_id":{"value":"xinf82zi"}}
+{"time":"2024-11-19T16:40:32.82951621Z","level":"INFO","msg":"sender: started","stream_id":"xinf82zi"}
+{"time":"2024-11-19T16:40:33.284762793Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-19T17:02:49.756326617Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-19T17:02:49.757172605Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-19T17:02:50.757102507Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"saving job artifact","runtime_seconds":0.81209418,"subtasks":[{"desc":"wandb-job.json","runtime_seconds":0.041347762,"progress":"2.3KB/2.3KB"},{"desc":"requirements.frozen.txt","runtime_seconds":0.041330431,"progress":"1.8KB/1.8KB"}]},{"desc":"uploading wandb-summary.json","runtime_seconds":0.774887375,"progress":"1.0KB/1.0KB"},{"desc":"uploading config.yaml","runtime_seconds":0.60026715,"progress":"1004B/1004B"},{"desc":"uploading output.log","runtime_seconds":0.60025223,"progress":"261B/261B"}],"total_operations":4}}
+{"time":"2024-11-19T17:02:52.824101661Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-19T17:02:54.086924839Z","level":"INFO","msg":"stream: closing","id":"xinf82zi"}
+{"time":"2024-11-19T17:02:54.086954229Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"xinf82zi"}}
+{"time":"2024-11-19T17:02:54.086978864Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"xinf82zi"}}
+{"time":"2024-11-19T17:02:54.087090181Z","level":"INFO","msg":"sender: closed","stream_id":"xinf82zi"}
+{"time":"2024-11-19T17:02:54.087104508Z","level":"INFO","msg":"stream: closed","id":"xinf82zi"}

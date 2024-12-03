@@ -1,0 +1,17 @@
+{"time":"2024-12-01T16:11:24.253423826Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T16:11:24.253443969Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_161124-5sp8v6dn/logs/debug-core.log"}
+{"time":"2024-12-01T16:11:24.357356652Z","level":"INFO","msg":"created new stream","id":"5sp8v6dn"}
+{"time":"2024-12-01T16:11:24.357395818Z","level":"INFO","msg":"stream: started","id":"5sp8v6dn"}
+{"time":"2024-12-01T16:11:24.357673821Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"5sp8v6dn"}}
+{"time":"2024-12-01T16:11:24.357770682Z","level":"INFO","msg":"handler: started","stream_id":{"value":"5sp8v6dn"}}
+{"time":"2024-12-01T16:11:24.3577925Z","level":"INFO","msg":"sender: started","stream_id":"5sp8v6dn"}
+{"time":"2024-12-01T16:11:24.664908631Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T16:37:40.185495869Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T16:37:40.186134011Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T16:37:41.186362198Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.619575535,"progress":"988B/988B"},{"desc":"uploading output.log","runtime_seconds":0.619562584,"progress":"260B/260B"}],"total_operations":2}}
+{"time":"2024-12-01T16:37:41.533380278Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T16:37:42.740796769Z","level":"INFO","msg":"stream: closing","id":"5sp8v6dn"}
+{"time":"2024-12-01T16:37:42.74081595Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"5sp8v6dn"}}
+{"time":"2024-12-01T16:37:42.740839828Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"5sp8v6dn"}}
+{"time":"2024-12-01T16:37:42.740905057Z","level":"INFO","msg":"sender: closed","stream_id":"5sp8v6dn"}
+{"time":"2024-12-01T16:37:42.740917302Z","level":"INFO","msg":"stream: closed","id":"5sp8v6dn"}

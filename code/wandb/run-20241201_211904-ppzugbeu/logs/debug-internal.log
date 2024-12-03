@@ -1,0 +1,17 @@
+{"time":"2024-12-01T21:19:04.389988148Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T21:19:04.390007106Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_211904-ppzugbeu/logs/debug-core.log"}
+{"time":"2024-12-01T21:19:04.492592444Z","level":"INFO","msg":"created new stream","id":"ppzugbeu"}
+{"time":"2024-12-01T21:19:04.492626727Z","level":"INFO","msg":"stream: started","id":"ppzugbeu"}
+{"time":"2024-12-01T21:19:04.492740956Z","level":"INFO","msg":"sender: started","stream_id":"ppzugbeu"}
+{"time":"2024-12-01T21:19:04.492679186Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"ppzugbeu"}}
+{"time":"2024-12-01T21:19:04.492709166Z","level":"INFO","msg":"handler: started","stream_id":{"value":"ppzugbeu"}}
+{"time":"2024-12-01T21:19:04.73916334Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T21:35:04.00739573Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T21:35:04.00793228Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T21:35:05.007896185Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.600330541,"progress":"994B/994B"},{"desc":"uploading output.log","runtime_seconds":0.60032147,"progress":"260B/260B"}],"total_operations":2}}
+{"time":"2024-12-01T21:35:05.330569692Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T21:35:06.671017071Z","level":"INFO","msg":"stream: closing","id":"ppzugbeu"}
+{"time":"2024-12-01T21:35:06.671041245Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"ppzugbeu"}}
+{"time":"2024-12-01T21:35:06.671059199Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"ppzugbeu"}}
+{"time":"2024-12-01T21:35:06.671087864Z","level":"INFO","msg":"sender: closed","stream_id":"ppzugbeu"}
+{"time":"2024-12-01T21:35:06.671121121Z","level":"INFO","msg":"stream: closed","id":"ppzugbeu"}

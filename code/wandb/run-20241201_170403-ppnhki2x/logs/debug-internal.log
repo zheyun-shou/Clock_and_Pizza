@@ -1,0 +1,17 @@
+{"time":"2024-12-01T17:04:03.633134095Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T17:04:03.633154833Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_170403-ppnhki2x/logs/debug-core.log"}
+{"time":"2024-12-01T17:04:03.735966321Z","level":"INFO","msg":"created new stream","id":"ppnhki2x"}
+{"time":"2024-12-01T17:04:03.736002528Z","level":"INFO","msg":"stream: started","id":"ppnhki2x"}
+{"time":"2024-12-01T17:04:03.736607699Z","level":"INFO","msg":"handler: started","stream_id":{"value":"ppnhki2x"}}
+{"time":"2024-12-01T17:04:03.736672977Z","level":"INFO","msg":"sender: started","stream_id":"ppnhki2x"}
+{"time":"2024-12-01T17:04:03.736697133Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"ppnhki2x"}}
+{"time":"2024-12-01T17:04:04.205293111Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T17:30:26.563440861Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T17:30:26.56421329Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T17:30:27.564096486Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.513078107,"progress":"988B/988B"},{"desc":"uploading output.log","runtime_seconds":0.513065651,"progress":"259B/259B"}],"total_operations":2}}
+{"time":"2024-12-01T17:30:27.98124382Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T17:30:29.221252528Z","level":"INFO","msg":"stream: closing","id":"ppnhki2x"}
+{"time":"2024-12-01T17:30:29.221273239Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"ppnhki2x"}}
+{"time":"2024-12-01T17:30:29.221297373Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"ppnhki2x"}}
+{"time":"2024-12-01T17:30:29.221378603Z","level":"INFO","msg":"sender: closed","stream_id":"ppnhki2x"}
+{"time":"2024-12-01T17:30:29.221394242Z","level":"INFO","msg":"stream: closed","id":"ppnhki2x"}

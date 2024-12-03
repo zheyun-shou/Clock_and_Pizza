@@ -1,0 +1,17 @@
+{"time":"2024-12-01T21:18:46.391996728Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T21:18:46.392029307Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_211846-556hn57r/logs/debug-core.log"}
+{"time":"2024-12-01T21:18:46.494133193Z","level":"INFO","msg":"created new stream","id":"556hn57r"}
+{"time":"2024-12-01T21:18:46.494174533Z","level":"INFO","msg":"stream: started","id":"556hn57r"}
+{"time":"2024-12-01T21:18:46.494262138Z","level":"INFO","msg":"sender: started","stream_id":"556hn57r"}
+{"time":"2024-12-01T21:18:46.494202868Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"556hn57r"}}
+{"time":"2024-12-01T21:18:46.494286927Z","level":"INFO","msg":"handler: started","stream_id":{"value":"556hn57r"}}
+{"time":"2024-12-01T21:18:46.780680651Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T21:35:05.189593875Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T21:35:05.190155528Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T21:35:06.190053226Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.615478061,"progress":"994B/994B"},{"desc":"uploading output.log","runtime_seconds":0.615465598,"progress":"261B/261B"}],"total_operations":2}}
+{"time":"2024-12-01T21:35:06.501114418Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T21:35:07.723288887Z","level":"INFO","msg":"stream: closing","id":"556hn57r"}
+{"time":"2024-12-01T21:35:07.723320496Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"556hn57r"}}
+{"time":"2024-12-01T21:35:07.723346161Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"556hn57r"}}
+{"time":"2024-12-01T21:35:07.723357371Z","level":"INFO","msg":"sender: closed","stream_id":"556hn57r"}
+{"time":"2024-12-01T21:35:07.723447227Z","level":"INFO","msg":"stream: closed","id":"556hn57r"}

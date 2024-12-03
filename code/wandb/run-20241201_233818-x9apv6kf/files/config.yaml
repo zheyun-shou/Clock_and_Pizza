@@ -1,0 +1,46 @@
+_wandb:
+    value:
+        cli_version: 0.18.5
+        m: []
+        python_version: 3.10.15
+        t:
+            "1":
+                - 1
+                - 55
+            "2":
+                - 1
+                - 55
+            "3":
+                - 2
+                - 16
+                - 23
+                - 55
+                - 62
+            "4": 3.10.15
+            "5": 0.18.5
+            "8":
+                - 5
+            "12": 0.18.5
+            "13": linux-x86_64
+C:
+    value: 59
+d_hidden:
+    value: 256
+d_model:
+    value: 256
+epoch:
+    value: 20000
+frac:
+    value: 0.8
+lr:
+    value: 0.001
+model_type:
+    value: B
+n_vocab:
+    value: 59
+runid:
+    value: beta_repr_9
+save_embeddings:
+    value: true
+weight_decay:
+    value: 2

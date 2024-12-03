@@ -1,0 +1,17 @@
+{"time":"2024-11-25T23:08:55.565585687Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-25T23:08:55.565606243Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241125_230855-jh77x43w/logs/debug-core.log"}
+{"time":"2024-11-25T23:08:55.668040261Z","level":"INFO","msg":"created new stream","id":"jh77x43w"}
+{"time":"2024-11-25T23:08:55.668071938Z","level":"INFO","msg":"stream: started","id":"jh77x43w"}
+{"time":"2024-11-25T23:08:55.66861146Z","level":"INFO","msg":"handler: started","stream_id":{"value":"jh77x43w"}}
+{"time":"2024-11-25T23:08:55.668722159Z","level":"INFO","msg":"sender: started","stream_id":"jh77x43w"}
+{"time":"2024-11-25T23:08:55.668744991Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"jh77x43w"}}
+{"time":"2024-11-25T23:08:56.030293183Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-25T23:20:11.334551718Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-25T23:20:11.335118592Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-25T23:20:12.335463861Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading history","runtime_seconds":15.822095469},{"desc":"uploading config.yaml","runtime_seconds":0.609289502,"progress":"752B/752B"},{"desc":"uploading output.log","runtime_seconds":0.60927527,"progress":"272B/272B"}],"total_operations":3}}
+{"time":"2024-11-25T23:20:12.677991047Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-25T23:20:14.051850035Z","level":"INFO","msg":"stream: closing","id":"jh77x43w"}
+{"time":"2024-11-25T23:20:14.051891754Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"jh77x43w"}}
+{"time":"2024-11-25T23:20:14.051915593Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"jh77x43w"}}
+{"time":"2024-11-25T23:20:14.051932766Z","level":"INFO","msg":"sender: closed","stream_id":"jh77x43w"}
+{"time":"2024-11-25T23:20:14.052048946Z","level":"INFO","msg":"stream: closed","id":"jh77x43w"}

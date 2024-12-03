@@ -216,90 +216,94 @@ def train(config):
 import random
 import string
 
-model_type = 'X' # ['A','B','C','D','X']
+model_type = 'B' # ['A','B','C','D','X']
 assert model_type in ['A','B','C','D','X']
-letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
-run_name = ''.join(random.choices(letters_and_numbers, k=10))
-print(run_name)
 
-C=n_vocab
-config=dict(
-    C=n_vocab,
-    model_type=model_type,
-    n_vocab=n_vocab,
-    d_model=d_hidden,
-    d_hidden=d_hidden,
-    epoch=20000,
-    lr=1e-3,
-    weight_decay=2.,
-    frac=0.8,
-    runid=run_name,
-    save_embeddings=True,
-)
-print(config)
-result_modadd = train(config)
+for count in range(5,10):
+    count+=1
+    letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
+    #run_name = 'beta_repr'.join(random.choices(letters_and_numbers, k=10))
+    run_name = 'beta_repr_'+str(count)
+    print(run_name)
 
-# save embeddings, see analysis.utils.extract_embeddings for details
-if config['save_embeddings']:
-    embed_path = 'result/model_{}_embeddings.npz'.format(config['model_type'].lower())
-    np.savez(os.path.join(root_path, embed_path), result_modadd['embeddings'])
+    C=n_vocab
+    config=dict(
+        C=n_vocab,
+        model_type=model_type,
+        n_vocab=n_vocab,
+        d_model=d_hidden,
+        d_hidden=d_hidden,
+        epoch=20000,
+        lr=1e-3,
+        weight_decay=2.,
+        frac=0.8,
+        runid=run_name,
+        save_embeddings=True,
+    )
+    print(config)
+    result_modadd = train(config)
 
-dataset = result_modadd['dataset']
-dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
-model = result_modadd['model']
-oo=[[0]*C for _ in range(C)]
-oc=[[0]*C for _ in range(C)]
-for x,y in dataloader:
-    x=x.to(DEVICE)
-    y=y.to(DEVICE)
-    with torch.inference_mode():
-        model.eval()
-        o=model(x)[:,:]
-        o0=o[list(range(len(x))),y]
-        o0=o0.cpu()
-        x=x.cpu()
-        for p,q in zip(o0,x):
-            A,B=int(q[0].item()),int(q[1].item())
-            oo[(A+B)%C][(A-B)%C]=p.item()
-        o[list(range(len(x))),y]=float("-inf")
-        o1=o.topk(dim=-1,k=2).values.cpu()
-        print(o1)
-        for p,q in zip(o1,x):
-            A,B=int(q[0].item()),int(q[1].item())
-            oc[(A+B)%C][(A-B)%C]=p[0].item()
-# use seaborn to plot the heatmap of oo
-import seaborn as sns
-run=result_modadd['run']
-oo=np.array(oc)
-dd=np.mean(np.std(oo,axis=0))/np.std(oo.flatten())
-print('dd',dd)
-run.summary['distance_dependency']=dd
-run.summary['distance_irrelevancy']=dd
-run.summary['logits']=oo
-mi,mx=np.min(oo),np.max(oo)
-oo=(oo-mi)/(mx-mi)
-run.summary['logits_normalized']=oo
-sns.heatmap(np.array(oo))
-sb=[]
-sx=[]
-sc=[]
-ss=[]
-for i in range(C):
-    s=oo[:,i]
-    sb.append(np.median(s))
-    ss.append(np.mean(s))
-    sx.append(np.std(oo[i]))
-print('std(med(col))',np.std(sb))
-print('mean(std(row))',np.mean(sx))
-run.summary['std_med_col']=np.std(sb)
-run.summary['mean_std_row']=np.mean(sx)
-run.summary['std_mean_col']=np.std(ss)
-run.summary['med_std_row']=np.median(sx)
-model_name=os.path.join(root_path, f'code/save/model_{run_name}.pt')
-model=result_modadd['model']
-torch.save(model.state_dict(),model_name)
-import json
-config['func']=None
-with open(os.path.join(root_path, f'code/save/config_{run_name}.json'),'w') as f:
-    json.dump(config,f)
-run.finish()
+    # save embeddings, see analysis.utils.extract_embeddings for details
+    if config['save_embeddings']:
+        embed_path = 'result/model_{}_embeddings.npz'.format(config['model_type'].lower())
+        np.savez(os.path.join(root_path, embed_path), result_modadd['embeddings'])
+
+    dataset = result_modadd['dataset']
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
+    model = result_modadd['model']
+    oo=[[0]*C for _ in range(C)]
+    oc=[[0]*C for _ in range(C)]
+    for x,y in dataloader:
+        x=x.to(DEVICE)
+        y=y.to(DEVICE)
+        with torch.inference_mode():
+            model.eval()
+            o=model(x)[:,:]
+            o0=o[list(range(len(x))),y]
+            o0=o0.cpu()
+            x=x.cpu()
+            for p,q in zip(o0,x):
+                A,B=int(q[0].item()),int(q[1].item())
+                oo[(A+B)%C][(A-B)%C]=p.item()
+            o[list(range(len(x))),y]=float("-inf")
+            o1=o.topk(dim=-1,k=2).values.cpu()
+            print(o1)
+            for p,q in zip(o1,x):
+                A,B=int(q[0].item()),int(q[1].item())
+                oc[(A+B)%C][(A-B)%C]=p[0].item()
+    # use seaborn to plot the heatmap of oo
+    import seaborn as sns
+    run=result_modadd['run']
+    oo=np.array(oc)
+    dd=np.mean(np.std(oo,axis=0))/np.std(oo.flatten())
+    print('dd',dd)
+    run.summary['distance_dependency']=dd
+    run.summary['distance_irrelevancy']=dd
+    run.summary['logits']=oo
+    mi,mx=np.min(oo),np.max(oo)
+    oo=(oo-mi)/(mx-mi)
+    run.summary['logits_normalized']=oo
+    sns.heatmap(np.array(oo))
+    sb=[]
+    sx=[]
+    sc=[]
+    ss=[]
+    for i in range(C):
+        s=oo[:,i]
+        sb.append(np.median(s))
+        ss.append(np.mean(s))
+        sx.append(np.std(oo[i]))
+    print('std(med(col))',np.std(sb))
+    print('mean(std(row))',np.mean(sx))
+    run.summary['std_med_col']=np.std(sb)
+    run.summary['mean_std_row']=np.mean(sx)
+    run.summary['std_mean_col']=np.std(ss)
+    run.summary['med_std_row']=np.median(sx)
+    model_name=os.path.join(root_path, f'code/save/model_{run_name}.pt')
+    model=result_modadd['model']
+    torch.save(model.state_dict(),model_name)
+    import json
+    config['func']=None
+    with open(os.path.join(root_path, f'code/save/config_{run_name}.json'),'w') as f:
+        json.dump(config,f)
+    run.finish()

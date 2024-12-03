@@ -1,0 +1,17 @@
+{"time":"2024-12-01T17:31:59.737203644Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T17:31:59.737223073Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_173159-oq88drov/logs/debug-core.log"}
+{"time":"2024-12-01T17:31:59.840162899Z","level":"INFO","msg":"created new stream","id":"oq88drov"}
+{"time":"2024-12-01T17:31:59.840194709Z","level":"INFO","msg":"stream: started","id":"oq88drov"}
+{"time":"2024-12-01T17:31:59.842782393Z","level":"INFO","msg":"handler: started","stream_id":{"value":"oq88drov"}}
+{"time":"2024-12-01T17:31:59.844109076Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"oq88drov"}}
+{"time":"2024-12-01T17:31:59.844280323Z","level":"INFO","msg":"sender: started","stream_id":"oq88drov"}
+{"time":"2024-12-01T17:32:00.166419488Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T17:58:35.786616664Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T17:58:35.787245316Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T17:58:36.787324915Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.590362873,"progress":"989B/989B"},{"desc":"uploading output.log","runtime_seconds":0.590350529,"progress":"260B/260B"}],"total_operations":2}}
+{"time":"2024-12-01T17:58:37.120843588Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T17:58:38.336532997Z","level":"INFO","msg":"stream: closing","id":"oq88drov"}
+{"time":"2024-12-01T17:58:38.336560489Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"oq88drov"}}
+{"time":"2024-12-01T17:58:38.336597879Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"oq88drov"}}
+{"time":"2024-12-01T17:58:38.336702549Z","level":"INFO","msg":"sender: closed","stream_id":"oq88drov"}
+{"time":"2024-12-01T17:58:38.336713903Z","level":"INFO","msg":"stream: closed","id":"oq88drov"}

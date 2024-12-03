@@ -1,0 +1,17 @@
+{"time":"2024-12-01T20:48:50.456815353Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T20:48:50.456829756Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_204850-q9y9d9kt/logs/debug-core.log"}
+{"time":"2024-12-01T20:48:50.559166585Z","level":"INFO","msg":"created new stream","id":"q9y9d9kt"}
+{"time":"2024-12-01T20:48:50.559196281Z","level":"INFO","msg":"stream: started","id":"q9y9d9kt"}
+{"time":"2024-12-01T20:48:50.559236819Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"q9y9d9kt"}}
+{"time":"2024-12-01T20:48:50.559270537Z","level":"INFO","msg":"handler: started","stream_id":{"value":"q9y9d9kt"}}
+{"time":"2024-12-01T20:48:50.559286977Z","level":"INFO","msg":"sender: started","stream_id":"q9y9d9kt"}
+{"time":"2024-12-01T20:48:50.895450021Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T21:04:54.570794242Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T21:04:54.571400482Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T21:04:55.571196819Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.426647141,"progress":"995B/995B"},{"desc":"uploading output.log","runtime_seconds":0.426634493,"progress":"261B/261B"}],"total_operations":2}}
+{"time":"2024-12-01T21:04:56.070811154Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T21:04:57.288644552Z","level":"INFO","msg":"stream: closing","id":"q9y9d9kt"}
+{"time":"2024-12-01T21:04:57.28868006Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"q9y9d9kt"}}
+{"time":"2024-12-01T21:04:57.288705898Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"q9y9d9kt"}}
+{"time":"2024-12-01T21:04:57.28873319Z","level":"INFO","msg":"sender: closed","stream_id":"q9y9d9kt"}
+{"time":"2024-12-01T21:04:57.288793128Z","level":"INFO","msg":"stream: closed","id":"q9y9d9kt"}

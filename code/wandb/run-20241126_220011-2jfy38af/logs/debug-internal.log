@@ -1,0 +1,17 @@
+{"time":"2024-11-26T22:00:11.721774195Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-26T22:00:11.721791917Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241126_220011-2jfy38af/logs/debug-core.log"}
+{"time":"2024-11-26T22:00:11.857176931Z","level":"INFO","msg":"created new stream","id":"2jfy38af"}
+{"time":"2024-11-26T22:00:11.857212235Z","level":"INFO","msg":"stream: started","id":"2jfy38af"}
+{"time":"2024-11-26T22:00:11.859022219Z","level":"INFO","msg":"handler: started","stream_id":{"value":"2jfy38af"}}
+{"time":"2024-11-26T22:00:11.859164641Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"2jfy38af"}}
+{"time":"2024-11-26T22:00:11.85963316Z","level":"INFO","msg":"sender: started","stream_id":"2jfy38af"}
+{"time":"2024-11-26T22:00:12.121784224Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-26T22:10:30.344971673Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-26T22:10:30.345694988Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-11-26T22:10:31.346215815Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading wandb-summary.json","runtime_seconds":0.791418641,"progress":"926B/926B"},{"desc":"uploading config.yaml","runtime_seconds":0.61046568,"progress":"752B/752B"},{"desc":"uploading output.log","runtime_seconds":0.61045048,"progress":"261B/261B"}],"total_operations":3}}
+{"time":"2024-11-26T22:10:31.673065685Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-11-26T22:10:32.892870522Z","level":"INFO","msg":"stream: closing","id":"2jfy38af"}
+{"time":"2024-11-26T22:10:32.892889615Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"2jfy38af"}}
+{"time":"2024-11-26T22:10:32.89291193Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"2jfy38af"}}
+{"time":"2024-11-26T22:10:32.892987658Z","level":"INFO","msg":"sender: closed","stream_id":"2jfy38af"}
+{"time":"2024-11-26T22:10:32.892998416Z","level":"INFO","msg":"stream: closed","id":"2jfy38af"}

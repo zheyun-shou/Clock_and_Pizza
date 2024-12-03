@@ -1,0 +1,17 @@
+{"time":"2024-12-01T20:32:58.43672262Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T20:32:58.43673615Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_203258-jkd04zjd/logs/debug-core.log"}
+{"time":"2024-12-01T20:32:58.539132477Z","level":"INFO","msg":"created new stream","id":"jkd04zjd"}
+{"time":"2024-12-01T20:32:58.539163339Z","level":"INFO","msg":"stream: started","id":"jkd04zjd"}
+{"time":"2024-12-01T20:32:58.539201057Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"jkd04zjd"}}
+{"time":"2024-12-01T20:32:58.539227824Z","level":"INFO","msg":"handler: started","stream_id":{"value":"jkd04zjd"}}
+{"time":"2024-12-01T20:32:58.539256067Z","level":"INFO","msg":"sender: started","stream_id":"jkd04zjd"}
+{"time":"2024-12-01T20:32:58.884515466Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T20:49:02.599472134Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T20:49:02.600076567Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T20:49:03.59994299Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.607677723,"progress":"994B/994B"},{"desc":"uploading output.log","runtime_seconds":0.607667133,"progress":"261B/261B"}],"total_operations":2}}
+{"time":"2024-12-01T20:49:03.92006385Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T20:49:05.134640585Z","level":"INFO","msg":"stream: closing","id":"jkd04zjd"}
+{"time":"2024-12-01T20:49:05.134662209Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"jkd04zjd"}}
+{"time":"2024-12-01T20:49:05.134687181Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"jkd04zjd"}}
+{"time":"2024-12-01T20:49:05.134696373Z","level":"INFO","msg":"sender: closed","stream_id":"jkd04zjd"}
+{"time":"2024-12-01T20:49:05.134765858Z","level":"INFO","msg":"stream: closed","id":"jkd04zjd"}

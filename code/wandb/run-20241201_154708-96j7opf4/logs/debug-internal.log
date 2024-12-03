@@ -1,0 +1,17 @@
+{"time":"2024-12-01T15:47:08.752170159Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T15:47:08.752420084Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_154708-96j7opf4/logs/debug-core.log"}
+{"time":"2024-12-01T15:47:08.855893605Z","level":"INFO","msg":"created new stream","id":"96j7opf4"}
+{"time":"2024-12-01T15:47:08.855937631Z","level":"INFO","msg":"stream: started","id":"96j7opf4"}
+{"time":"2024-12-01T15:47:08.856629542Z","level":"INFO","msg":"handler: started","stream_id":{"value":"96j7opf4"}}
+{"time":"2024-12-01T15:47:08.857387161Z","level":"INFO","msg":"sender: started","stream_id":"96j7opf4"}
+{"time":"2024-12-01T15:47:08.857412467Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"96j7opf4"}}
+{"time":"2024-12-01T15:47:09.140082505Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T16:12:39.829864374Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T16:12:39.830646241Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T16:12:40.833152649Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.611044762,"progress":"988B/988B"},{"desc":"uploading output.log","runtime_seconds":0.611029505,"progress":"261B/261B"}],"total_operations":2}}
+{"time":"2024-12-01T16:12:41.135866067Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T16:12:42.365334348Z","level":"INFO","msg":"stream: closing","id":"96j7opf4"}
+{"time":"2024-12-01T16:12:42.365355947Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"96j7opf4"}}
+{"time":"2024-12-01T16:12:42.365380368Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"96j7opf4"}}
+{"time":"2024-12-01T16:12:42.365472818Z","level":"INFO","msg":"sender: closed","stream_id":"96j7opf4"}
+{"time":"2024-12-01T16:12:42.365492142Z","level":"INFO","msg":"stream: closed","id":"96j7opf4"}

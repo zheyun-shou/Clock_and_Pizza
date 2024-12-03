@@ -1,0 +1,17 @@
+{"time":"2024-12-01T20:32:53.736746186Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T20:32:53.736759422Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_203253-lfbf8icv/logs/debug-core.log"}
+{"time":"2024-12-01T20:32:53.838993148Z","level":"INFO","msg":"created new stream","id":"lfbf8icv"}
+{"time":"2024-12-01T20:32:53.839022907Z","level":"INFO","msg":"stream: started","id":"lfbf8icv"}
+{"time":"2024-12-01T20:32:53.83906013Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"lfbf8icv"}}
+{"time":"2024-12-01T20:32:53.839085566Z","level":"INFO","msg":"handler: started","stream_id":{"value":"lfbf8icv"}}
+{"time":"2024-12-01T20:32:53.839119926Z","level":"INFO","msg":"sender: started","stream_id":"lfbf8icv"}
+{"time":"2024-12-01T20:32:54.110212618Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T20:48:47.790875521Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T20:48:47.791416725Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T20:48:48.791358334Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading config.yaml","runtime_seconds":0.625318473,"progress":"994B/994B"},{"desc":"uploading output.log","runtime_seconds":0.625310514,"progress":"261B/261B"}],"total_operations":2}}
+{"time":"2024-12-01T20:48:49.085854899Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T20:48:50.409204495Z","level":"INFO","msg":"stream: closing","id":"lfbf8icv"}
+{"time":"2024-12-01T20:48:50.409235122Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"lfbf8icv"}}
+{"time":"2024-12-01T20:48:50.4092577Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"lfbf8icv"}}
+{"time":"2024-12-01T20:48:50.409272373Z","level":"INFO","msg":"sender: closed","stream_id":"lfbf8icv"}
+{"time":"2024-12-01T20:48:50.409323435Z","level":"INFO","msg":"stream: closed","id":"lfbf8icv"}

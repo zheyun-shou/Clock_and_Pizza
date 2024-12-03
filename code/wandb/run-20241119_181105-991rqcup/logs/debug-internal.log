@@ -1,0 +1,11 @@
+{"time":"2024-11-19T18:11:05.625522573Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-11-19T18:11:05.62554401Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241119_181105-991rqcup/logs/debug-core.log"}
+{"time":"2024-11-19T18:11:05.73561182Z","level":"INFO","msg":"created new stream","id":"991rqcup"}
+{"time":"2024-11-19T18:11:05.735668847Z","level":"INFO","msg":"stream: started","id":"991rqcup"}
+{"time":"2024-11-19T18:11:05.737688561Z","level":"INFO","msg":"handler: started","stream_id":{"value":"991rqcup"}}
+{"time":"2024-11-19T18:11:05.737997784Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"991rqcup"}}
+{"time":"2024-11-19T18:11:05.738188935Z","level":"INFO","msg":"sender: started","stream_id":"991rqcup"}
+{"time":"2024-11-19T18:11:06.051882817Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-11-19T18:11:10.996074951Z","level":"INFO","msg":"stream: closing","id":"991rqcup"}
+{"time":"2024-11-19T18:11:10.996121166Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-11-19T18:11:10.99767172Z","level":"INFO","msg":"Stopped system monitor"}

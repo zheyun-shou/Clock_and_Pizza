@@ -1,0 +1,17 @@
+{"time":"2024-12-01T23:04:46.079348378Z","level":"INFO","msg":"using version","core version":"0.18.5"}
+{"time":"2024-12-01T23:04:46.079368629Z","level":"INFO","msg":"created symlink","path":"/home/Zheyun/Clock_and_Pizza/code/wandb/run-20241201_230446-12zcwtce/logs/debug-core.log"}
+{"time":"2024-12-01T23:04:46.182227677Z","level":"INFO","msg":"created new stream","id":"12zcwtce"}
+{"time":"2024-12-01T23:04:46.182275948Z","level":"INFO","msg":"stream: started","id":"12zcwtce"}
+{"time":"2024-12-01T23:04:46.182334507Z","level":"INFO","msg":"sender: started","stream_id":"12zcwtce"}
+{"time":"2024-12-01T23:04:46.182315298Z","level":"INFO","msg":"writer: Do: started","stream_id":{"value":"12zcwtce"}}
+{"time":"2024-12-01T23:04:46.182359169Z","level":"INFO","msg":"handler: started","stream_id":{"value":"12zcwtce"}}
+{"time":"2024-12-01T23:04:46.477438534Z","level":"INFO","msg":"Starting system monitor"}
+{"time":"2024-12-01T23:15:48.391326763Z","level":"INFO","msg":"Stopping system monitor"}
+{"time":"2024-12-01T23:15:48.391988377Z","level":"INFO","msg":"Stopped system monitor"}
+{"time":"2024-12-01T23:15:49.391789246Z","level":"INFO","msg":"handler: operation stats","stats":{"operations":[{"desc":"uploading output.log","runtime_seconds":0.622407582,"progress":"270B/270B"},{"desc":"uploading config.yaml","runtime_seconds":0.622392156,"progress":"753B/753B"}],"total_operations":2}}
+{"time":"2024-12-01T23:15:49.701764249Z","level":"INFO","msg":"fileTransfer: Close: file transfer manager closed"}
+{"time":"2024-12-01T23:15:51.087502107Z","level":"INFO","msg":"stream: closing","id":"12zcwtce"}
+{"time":"2024-12-01T23:15:51.087525243Z","level":"INFO","msg":"handler: closed","stream_id":{"value":"12zcwtce"}}
+{"time":"2024-12-01T23:15:51.087556914Z","level":"INFO","msg":"sender: closed","stream_id":"12zcwtce"}
+{"time":"2024-12-01T23:15:51.087549252Z","level":"INFO","msg":"writer: Close: closed","stream_id":{"value":"12zcwtce"}}
+{"time":"2024-12-01T23:15:51.087653866Z","level":"INFO","msg":"stream: closed","id":"12zcwtce"}
