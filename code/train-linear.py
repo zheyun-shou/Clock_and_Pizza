@@ -216,14 +216,14 @@ def train(config):
 import random
 import string
 
-model_type = 'A' # ['A','B','C','D','X']
+model_type = 'X' # ['A','B','C','D','X']
 assert model_type in ['A','B','C','D','X']
 
-for count in range(5,10):
+for count in range(0,10):
     count+=1
     letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
     #run_name = 'beta_repr'.join(random.choices(letters_and_numbers, k=10))
-    run_name = 'alpha_repr_'+str(count)
+    run_name = 'x_repr_'+str(count)
     print(run_name)
 
     C=n_vocab
