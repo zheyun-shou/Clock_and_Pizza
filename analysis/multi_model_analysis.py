@@ -28,14 +28,18 @@ DEVICE='cpu'
 
 # model type
 model_type='A'
+suffix='_repr_trans_'
 use_transformer = False
+
+assert model_type in ['A', 'B', 'alpha', 'beta', 'gamma', 'delta', 'alpha_prime(x)']
 
 # read all the filename in the specified directory, and extract the runid from the filename
 def read_from_json(directory, model_type=None):
     global use_transformer
     run_ids, run_types = [], []
+    directory = os.path.join(directory, f"model_{model_type}")
     for filename in os.listdir(directory):
-        if filename.startswith('config_'+model_type+'_repr_trans_') and filename.endswith('.json'):
+        if filename.startswith('config_'+model_type+suffix) and filename.endswith('.json'):
             config_path = os.path.join(directory, filename)
             runid = filename[len('config_'):-len('.json')]
             model_path = os.path.join(directory, f'model_{runid}.pt')
@@ -52,7 +56,8 @@ def read_from_json(directory, model_type=None):
                         run_types.append(run_type)
                         run_ids.append(filename[len('config_'):-len('.json')])
                     elif 'model_type' in config:
-                        if config['model_type'] in linear_models.keys() and config['model_type'] == model_type.upper():
+                        type_mapping = {'alpha': 'a', 'beta': 'b', 'gamma': 'c', 'delta': 'd', 'alpha_prime(x)': 'x'}
+                        if config['model_type'] in linear_models.keys() and config['model_type'] == type_mapping[model_type]:
                             run_type = f"Model {config['model_type']}"
                             run_types.append(run_type)
                             run_ids.append(filename[len('config_'):-len('.json')])
@@ -130,7 +135,7 @@ if __name__ == '__main__':
     run_ids, run_types = read_from_json(os.path.join(root_path, 'code/save'), model_type='A')
     # runid='A_pretrained'
     runid = run_ids[0]
-    with open(os.path.join(root_path, f'code/save/config_{runid}.json'),'r') as f:
+    with open(os.path.join(root_path, f'code/save/model_{model_type}/config_{runid}.json'),'r') as f:
         config=json.load(f)
 
     # load the dataset
@@ -164,9 +169,9 @@ if __name__ == '__main__':
     circularities = []
     distance_irrelevances = []
 
-    for type, id in zip(run_ids, run_types):
-        print(f"Loading model {id}, {type}")
-        model_file=os.path.join(root_path, f'code/save/model_{id}.pt')
+    for id, type in zip(run_ids, run_types):
+        print(f"\nLoading model {id}, {type}")
+        model_file=os.path.join(root_path, f'code/save/model_{model_type}/model_{id}.pt')
         model.load_state_dict(torch.load(model_file, map_location=DEVICE))
         grad_sym = gradient_symmetricity(model, xs, C=C)
         circ = circularity(model, first_k=4)
@@ -174,7 +179,7 @@ if __name__ == '__main__':
         print('Gradient Symmetricity', grad_sym)
         print('Circularity', circ)
         print('Distance Irrelevance', dist_irr)
-        with open(os.path.join(root_path, f'code/save/config_{id}.json'),'r') as f:
+        with open(os.path.join(root_path, f'code/save/model_{model_type}/config_{id}.json'),'r') as f:
             config = json.load(f)
             attn_coeffs.append(config['attn_coeff'])
         gradient_symmetricities.append(grad_sym)
@@ -215,4 +220,4 @@ if __name__ == '__main__':
     cbar2.set_label("Gradient Symmetry")
 
     # Show plot
-    plt.savefig("fft_embedding.png")
+    plt.savefig("output.png")
