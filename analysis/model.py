@@ -9,7 +9,7 @@ import einops
 d_hidden=256
 n_vocab=59
 
-class MyModelD(nn.Module): # Model δ
+class MyModelD(nn.Module):
     def __init__(self):
         super(MyModelD, self).__init__()
         self.embed = nn.Embedding(n_vocab, d_hidden//2)
@@ -17,21 +17,23 @@ class MyModelD(nn.Module): # Model δ
         self.l1 = nn.Linear(d_hidden, d_hidden, bias=True)
         self.embed.weight.data /= (d_hidden//2)**0.5
         self.unembed.weight.data /= d_hidden**0.5
-    def backdoor(self, x):
+        self.pause=False
+    def backdoor_h(self, x):
         x = self.embed(x)
-        assert len(x.shape)==3 and x.shape[1]==2
+        x0 = x
         x = torch.cat([x[:,0],x[:,1]], dim=1)
         x = self.l1(x)
         x = F.relu(x)
-        #x = self.l2(x)
-        #x = F.relu(x)
-        return x
-    def forward(self, x):
-        x = self.backdoor(x)
+        return x0,x
+    def forward_h(self, x):
+        _, x = self.backdoor_h(x)
         x = x @ self.unembed.weight.t()
-        return x
-    
-class MyModelA(nn.Module): # Model α
+        return _, x
+    def backdoor(self,x):
+        return self.backdoor_h(x)[1]
+    def forward(self,x):
+        return self.forward_h(x)[1]
+class MyModelA(nn.Module):
     def __init__(self):
         super(MyModelA, self).__init__()
         self.embed = nn.Embedding(n_vocab, d_hidden)
@@ -39,18 +41,75 @@ class MyModelA(nn.Module): # Model α
         self.l1 = nn.Linear(d_hidden, d_hidden, bias=True)
         self.embed.weight.data /= (d_hidden//2)**0.5
         self.unembed.weight.data /= d_hidden**0.5
-    def backdoor(self, x):
+    def backdoor_h(self, x):
         x = self.embed(x)
+        x0 = x
         assert len(x.shape)==3 and x.shape[1]==2
         x = self.l1(x[:,0]+x[:,1])
         x = F.relu(x)
         #x = self.l2(x)
         #x = F.relu(x)
-        return x
-    def forward(self, x):
-        x = self.backdoor(x)
+        return x0,x
+    def forward_h(self, x):
+        _, x = self.backdoor_h(x)
         x = x @ self.unembed.weight.t()
-        return x
+        return _, x
+    def backdoor(self,x):
+        return self.backdoor_h(x)[1]
+    def forward(self,x):
+        return self.forward_h(x)[1]
+class MyModelB(nn.Module):
+    def __init__(self):
+        super(MyModelB, self).__init__()
+        self.embed = nn.Embedding(n_vocab, d_hidden)
+        self.unembed = nn.Embedding(n_vocab, d_hidden)
+        self.l1 = nn.Linear(d_hidden, d_hidden, bias=True)
+        self.l2 = nn.Linear(d_hidden, d_hidden, bias=True)
+        self.embed.weight.data /= (d_hidden//2)**0.5
+        self.unembed.weight.data /= d_hidden**0.5
+    def backdoor_h(self, x):
+        x = self.embed(x)
+        x0 = x
+        assert len(x.shape)==3 and x.shape[1]==2
+        x = self.l1(x[:,0]+x[:,1])
+        x = F.relu(x)
+        x = self.l2(x)
+        x = F.relu(x)
+        return x0, x
+    def forward_h(self, x):
+        _, x = self.backdoor_h(x)
+        x = x @ self.unembed.weight.t()
+        return _, x
+    def backdoor(self,x):
+        return self.backdoor_h(x)[1]
+    def forward(self,x):
+        return self.forward_h(x)[1]
+class MyModelC(nn.Module):
+    def __init__(self):
+        super(MyModelC, self).__init__()
+        self.embed = nn.Embedding(n_vocab, d_hidden)
+        self.unembed = nn.Embedding(n_vocab, d_hidden)
+        self.l1 = nn.Linear(d_hidden, d_hidden, bias=True)
+        self.l2 = nn.Linear(d_hidden, d_hidden, bias=True)
+        self.embed.weight.data /= (d_hidden//2)**0.5
+        self.unembed.weight.data /= d_hidden**0.5
+    def backdoor_h(self, x):
+        x = self.embed(x)
+        x0 = x
+        assert len(x.shape)==3 and x.shape[1]==2
+        x = self.l1(x[:,0])+self.l1(x[:,1])
+        x = F.relu(x)
+        x = self.l2(x)
+        x = F.relu(x)
+        return x0, x
+    def forward_h(self, x):
+        _, x = self.backdoor_h(x)
+        x = x @ self.unembed.weight.t()
+        return _, x
+    def backdoor(self,x):
+        return self.backdoor_h(x)[1]
+    def forward(self,x):
+        return self.forward_h(x)[1]
     
 class MyModelX(nn.Module): # Model α′
     def __init__(self):
@@ -62,60 +121,39 @@ class MyModelX(nn.Module): # Model α′
         self.embed1.weight.data /= (d_hidden//2)**0.5
         self.embed2.weight.data /= (d_hidden//2)**0.5
         self.unembed.weight.data /= d_hidden**0.5
-    def backdoor(self, x):
-        x = self.l1(self.embed1(x[:,0])+self.embed2(x[:,1]))
+
+    ## The original code is as follows:
+
+    # def backdoor(self, x):
+    #     x = self.l1(self.embed1(x[:,0])+self.embed2(x[:,1]))
+    #     x = F.relu(x)
+    #     #x = self.l2(x)
+    #     #x = F.relu(x)
+    #     return x
+    # def forward(self, x):
+    #     x = self.backdoor(x)
+    #     x = x @ self.unembed.weight.t()
+    #     return x
+
+    ## Note! The following code is not used in the paper
+
+    def backdoor_h(self, x):
+        x1 = self.embed1(x[:,0])
+        x2 = self.embed2(x[:,1])
+        x = self.l1(x1+x2)
         x = F.relu(x)
         #x = self.l2(x)
         #x = F.relu(x)
-        return x
-    def forward(self, x):
-        x = self.backdoor(x)
+        return x1, x2, x
+    def forward_h(self, x):
+        _, _, x = self.backdoor_h(x)
         x = x @ self.unembed.weight.t()
-        return x
+        return _, _, x
+    def backdoor(self,x):
+        return self.backdoor_h(x)[-1]
+    def forward(self,x):
+        return self.forward_h(x)[-1]
 
-class MyModelB(nn.Module): # Model β
-    def __init__(self):
-        super(MyModelB, self).__init__()
-        self.embed = nn.Embedding(n_vocab, d_hidden)
-        self.unembed = nn.Embedding(n_vocab, d_hidden)
-        self.l1 = nn.Linear(d_hidden, d_hidden, bias=True)
-        self.l2 = nn.Linear(d_hidden, d_hidden, bias=True)
-        self.embed.weight.data /= (d_hidden//2)**0.5
-        self.unembed.weight.data /= d_hidden**0.5
-    def backdoor(self, x):
-        x = self.embed(x)
-        assert len(x.shape)==3 and x.shape[1]==2
-        x = self.l1(x[:,0]+x[:,1])
-        x = F.relu(x)
-        x = self.l2(x)
-        x = F.relu(x)
-        return x
-    def forward(self, x):
-        x = self.backdoor(x)
-        x = x @ self.unembed.weight.t()
-        return x
-    
-class MyModelC(nn.Module): # Model γ
-    def __init__(self):
-        super(MyModelC, self).__init__()
-        self.embed = nn.Embedding(n_vocab, d_hidden)
-        self.unembed = nn.Embedding(n_vocab, d_hidden)
-        self.l1 = nn.Linear(d_hidden, d_hidden, bias=True)
-        self.l2 = nn.Linear(d_hidden, d_hidden, bias=True)
-        self.embed.weight.data /= (d_hidden//2)**0.5
-        self.unembed.weight.data /= d_hidden**0.5
-    def backdoor(self, x):
-        x = self.embed(x)
-        assert len(x.shape)==3 and x.shape[1]==2
-        x = self.l1(x[:,0])+self.l1(x[:,1])
-        x = F.relu(x)
-        x = self.l2(x)
-        x = F.relu(x)
-        return x
-    def forward(self, x):
-        x = self.backdoor(x)
-        x = x @ self.unembed.weight.t()
-        return x
 
 # Transformer
 

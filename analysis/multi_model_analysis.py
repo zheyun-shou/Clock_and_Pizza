@@ -19,6 +19,7 @@ warnings.filterwarnings("ignore")
 root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(root_path)
 
+from analysis.utils import extract_embeddings
 from dataset import MyAddDataSet
 from model import MyModelA, MyModelB, MyModelC, MyModelD, MyModelX, Transformer
 
@@ -27,11 +28,12 @@ C=59
 DEVICE='cpu'
 
 # model type
-model_type='A'
-suffix='_repr_trans_'
+model_type='gama'
+suffix='_repr_'
 use_transformer = False
 
-assert model_type in ['A', 'B', 'alpha', 'beta', 'gamma', 'delta', 'alpha_prime(x)']
+assert model_type in ['A', 'B', 'alpha', 'beta', 'gama', 'delta', 'x']
+type_mapping = {'alpha': 'A', 'beta': 'B', 'gama': 'C', 'delta': 'D', 'x': 'X'}
 
 # read all the filename in the specified directory, and extract the runid from the filename
 def read_from_json(directory, model_type=None):
@@ -56,15 +58,14 @@ def read_from_json(directory, model_type=None):
                         run_types.append(run_type)
                         run_ids.append(filename[len('config_'):-len('.json')])
                     elif 'model_type' in config:
-                        type_mapping = {'alpha': 'a', 'beta': 'b', 'gamma': 'c', 'delta': 'd', 'alpha_prime(x)': 'x'}
-                        if config['model_type'] in linear_models.keys() and config['model_type'] == type_mapping[model_type]:
+                        if config['model_type'] == type_mapping[model_type]:
                             run_type = f"Model {config['model_type']}"
                             run_types.append(run_type)
                             run_ids.append(filename[len('config_'):-len('.json')])
                             use_transformer = False
     return run_ids, run_types
 
-def gradient_symmetricity(model, xs, C=59):
+def gradient_symmetricity(model, xs):
     tt=0
     for abc in xs:
         a,b,c=abc
@@ -72,8 +73,12 @@ def gradient_symmetricity(model, xs, C=59):
         t,o0=model.forward_h(x)
         model.zero_grad()
         #print(a,b,c)
-        model.remove_all_hooks()
-        o=o0[0,-1,:]
+        try: # for transformer
+            model.remove_all_hooks()
+            o=o0[0,-1,:]
+        except: # for linear models
+            o=o0[0,:]
+        
         t.retain_grad()
         o[c].backward(retain_graph=True)
         tg=t.grad[0].detach().cpu().numpy() # target gradient
@@ -84,9 +89,13 @@ def gradient_symmetricity(model, xs, C=59):
     return symm
 
 def circularity(model, first_k=4):
-    we=model.embed.W_E.T
+    embedding = extract_embeddings(model)
+    if model_type in ['A', 'B']:
+        we=embedding['embed'].T
+    elif model_type in ['alpha', 'beta', 'gama', 'delta']:
+        we=embedding['embed']
     pca = PCA(n_components=20)
-    we2=pca.fit_transform(we.detach().cpu().numpy())
+    we2=pca.fit_transform(we)
     def ang(x):
         return math.cos(x)+math.sin(x)*1j
     rst=0
@@ -111,8 +120,11 @@ def distance_irrelevance(model, dataloader, show_plot=False):
     for x,y in dataloader:
         with torch.inference_mode():
             model.eval()
-            model.remove_all_hooks()
-            o=model(x)[:,-1,:] # model output
+            try:
+                model.remove_all_hooks()
+                o=model(x)[:,-1,:] # model output
+            except:
+                o=model(x)
             o0=o[list(range(len(x))),y] # extracts the logit corresponding to the true label y for each sample?
             o0=o0.cpu()
             x=x.cpu()
@@ -132,22 +144,27 @@ def distance_irrelevance(model, dataloader, show_plot=False):
 
 if __name__ == '__main__':
     # load the config file
-    run_ids, run_types = read_from_json(os.path.join(root_path, 'code/save'), model_type='A')
+    run_ids, run_types = read_from_json(os.path.join(root_path, 'code/save'), model_type=model_type)
     # runid='A_pretrained'
     runid = run_ids[0]
     with open(os.path.join(root_path, f'code/save/model_{model_type}/config_{runid}.json'),'r') as f:
         config=json.load(f)
 
     # load the dataset
-    dataset = MyAddDataSet(func=eval(config['funcs']),
-                        C=config['C'],
-                        diff_vocab=config['diff_vocab'],
-                        eqn_sign=config['eqn_sign'],
+    try:
+        func = eval(config['funcs'])
+    except:
+        func = lambda x: (x[0]+x[1])%C
+    dataset = MyAddDataSet(
+                        func=eval(config['funcs']) if 'funcs' in config else lambda x: (x[0]+x[1])%C,
+                        C=config['C'] if 'C' in config else C,
+                        diff_vocab=config['diff_vocab'] if 'diff_vocab' in config else False,
+                        eqn_sign=config['eqn_sign'] if 'eqn_sign' in config else False,
                         device=DEVICE)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
 
     # initialize the model
-    linear_models={'A':MyModelA,'B':MyModelB,'C':MyModelC,'D':MyModelD,'X':MyModelX}
+    linear_models={'alpha':MyModelA,'beta':MyModelB,'gama':MyModelC,'delta':MyModelD,'x':MyModelX}
     if not use_transformer:
         model=linear_models[model_type]()
     else:
@@ -173,7 +190,7 @@ if __name__ == '__main__':
         print(f"\nLoading model {id}, {type}")
         model_file=os.path.join(root_path, f'code/save/model_{model_type}/model_{id}.pt')
         model.load_state_dict(torch.load(model_file, map_location=DEVICE))
-        grad_sym = gradient_symmetricity(model, xs, C=C)
+        grad_sym = gradient_symmetricity(model, xs)
         circ = circularity(model, first_k=4)
         dist_irr = distance_irrelevance(model, dataloader, show_plot=False)
         print('Gradient Symmetricity', grad_sym)
@@ -181,7 +198,7 @@ if __name__ == '__main__':
         print('Distance Irrelevance', dist_irr)
         with open(os.path.join(root_path, f'code/save/model_{model_type}/config_{id}.json'),'r') as f:
             config = json.load(f)
-            attn_coeffs.append(config['attn_coeff'])
+            attn_coeffs.append(config['attn_coeff'] if 'attn_coeff' in config else 0)
         gradient_symmetricities.append(grad_sym)
         circularities.append(circ)
         distance_irrelevances.append(dist_irr)
