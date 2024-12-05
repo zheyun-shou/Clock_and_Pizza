@@ -2,3 +2,5 @@
 *.npz
 *.pyc
 /code/wandb/
+/wandb/
+/model_*/

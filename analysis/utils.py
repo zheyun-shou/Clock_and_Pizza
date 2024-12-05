@@ -39,9 +39,8 @@ def extract_embeddings(model):
     res = {name[i]: res[i] for i in range(len(res)) if res[i] is not None}
     return res
 
-def get_final_circle_freqs(embeddings, all_epoches=False):
-    if all_epoches:
-        embedding = embeddings[-1]
+def get_final_circle_freqs(embeddings):
+    embedding = embeddings[-1]
     spectrum = np.fft.fft(embedding, axis=0)
     signal = np.linalg.norm(spectrum, axis=1)
     sorted_freq = np.argsort(signal)[::-1]
