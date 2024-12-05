@@ -543,19 +543,19 @@ import random
 import string
 import seaborn as sns
 
-for count in range(5,10):
-    count+=1
+for count in range(100):
     # for use_linear in [False]: # false model B, true model A
     letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
     #run_name = 'A_repr_'.join(random.choices(letters_and_numbers, k=10))
-    run_name = 'A_repr_trans_'+str(count)
+    # run_name = 'A_repr_trans_'+str(count+1)
+    attn_coeff=random.uniform(0,1)
+    run_name = f"B_{attn_coeff:.6f}"
     print(run_name)
     C=59
     n_layers=1
     # if random.randint(0,3):
     #     n_layers=random.randint(1,4)
-    frac_coeff=0.8
-    # frac_coeff=random.uniform(0,1)
+    # frac_coeff=0.8
     diff_vocab=0
     eqn_sign=0
     # if random.randint(0,4)==0:
@@ -582,7 +582,7 @@ for count in range(5,10):
         frac=0.8,
         # should adjust the attn_coeff
         # attn_coeff=frac_coeff,
-        attn_coeff=0,
+        attn_coeff=attn_coeff,
         runid=run_name,
         diff_vocab=diff_vocab,
         eqn_sign=eqn_sign,
@@ -644,12 +644,12 @@ for count in range(5,10):
     run.summary['mean_std_row']=np.mean(sx)
     run.summary['std_mean_col']=np.std(ss)
     run.summary['med_std_row']=np.median(sx)
-    model_name=os.path.join(root_path, f'code/save/model_{run_name}.pt')
+    model_name=os.path.join(root_path, f'code/save/model_{"B" if config["attn_coeff"] else "A"}/model_{run_name}.pt')
     model=result_modadd['model']
     torch.save(model.state_dict(), model_name)
     import json
     config['func']=None
-    with open(os.path.join(root_path, f'code/save/config_{run_name}.json'),'w') as f:
+    with open(os.path.join(root_path, f'code/save/model_{"B" if config["attn_coeff"] else "A"}/config_{run_name}.json'),'w') as f:
         json.dump(config,f,separators=(',\n', ': '))
     run.finish()
 
