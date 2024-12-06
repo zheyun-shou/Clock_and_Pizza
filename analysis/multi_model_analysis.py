@@ -20,28 +20,27 @@ root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(root_path)
 
 from analysis.utils import extract_embeddings
-from dataset import MyAddDataSet
-from model import MyModelA, MyModelB, MyModelC, MyModelD, MyModelX, Transformer
+from analysis.dataset import MyAddDataSet
+from analysis.model import MyModelA, MyModelB, MyModelC, MyModelD, MyModelX, Transformer
 
 # constants
 C=59
 DEVICE='cpu'
 
 # model type
-model_type='gama'
-suffix='_repr_'
-use_transformer = False
+model_type='B'
+experiment_dir='_d'
+varying_width=True
+verbose=True
 
 assert model_type in ['A', 'B', 'alpha', 'beta', 'gama', 'delta', 'x']
 type_mapping = {'alpha': 'A', 'beta': 'B', 'gama': 'C', 'delta': 'D', 'x': 'X'}
 
 # read all the filename in the specified directory, and extract the runid from the filename
 def read_from_json(directory, model_type=None):
-    global use_transformer
     run_ids, run_types = [], []
-    directory = os.path.join(directory, f"model_{model_type}")
     for filename in os.listdir(directory):
-        if filename.startswith('config_'+model_type+suffix) and filename.endswith('.json'):
+        if filename.startswith('config_'+model_type) and filename.endswith('.json'):
             config_path = os.path.join(directory, filename)
             runid = filename[len('config_'):-len('.json')]
             model_path = os.path.join(directory, f'model_{runid}.pt')
@@ -54,7 +53,6 @@ def read_from_json(directory, model_type=None):
                             run_type = "Transformer with constant attention"
                         elif abs(config['attn_coeff']) >= 1e-6 and model_type == 'B':
                             run_type = "Transformer"
-                        use_transformer = True
                         run_types.append(run_type)
                         run_ids.append(filename[len('config_'):-len('.json')])
                     elif 'model_type' in config:
@@ -62,11 +60,12 @@ def read_from_json(directory, model_type=None):
                             run_type = f"Model {config['model_type']}"
                             run_types.append(run_type)
                             run_ids.append(filename[len('config_'):-len('.json')])
-                            use_transformer = False
     return run_ids, run_types
 
-def gradient_symmetricity(model, xs):
+def gradient_symmetricity(model, xs=None):
     tt=0
+    if xs is None:
+        xs = random.sample(list(itertools.product(range(C), repeat=3)), 100)
     for abc in xs:
         a,b,c=abc
         x=torch.tensor([[a,b]],device=DEVICE)
@@ -115,7 +114,7 @@ def circularity(model, first_k=4):
     rst/=first_k
     return rst
     
-def distance_irrelevance(model, dataloader, show_plot=False):
+def distance_irrelevance(model, dataloader, show_plot=False, get_logits=False):
     oo=[[0]*C for _ in range(C)]
     for x,y in dataloader:
         with torch.inference_mode():
@@ -124,7 +123,7 @@ def distance_irrelevance(model, dataloader, show_plot=False):
                 model.remove_all_hooks()
                 o=model(x)[:,-1,:] # model output
             except:
-                o=model(x)
+                o=model(x)[:, :]
             o0=o[list(range(len(x))),y] # extracts the logit corresponding to the true label y for each sample?
             o0=o0.cpu()
             x=x.cpu()
@@ -135,48 +134,34 @@ def distance_irrelevance(model, dataloader, show_plot=False):
     dd=np.mean(np.std(oo,axis=0))/np.std(oo.flatten())
     if show_plot:
         plt.figure(dpi=300)
-        sns.heatmap(np.array(oo))
-        plt.xlabel(f'(a-b) mod {C}')
-        plt.ylabel(f'(a+b) mod {C}')
+        sns.heatmap(np.array(oo).T)
+        plt.xlabel(f'(a+b) mod {C}')
+        plt.ylabel(f'(a-b) mod {C}')
         plt.title('Correct Logits')
-    return dd
+        plt.savefig(os.path.join(root_path, f"result/rep_logits.png"))
+    if get_logits:
+        return oo, dd
+    else:
+        return dd
 
 
 if __name__ == '__main__':
-    # load the config file
-    run_ids, run_types = read_from_json(os.path.join(root_path, 'code/save'), model_type=model_type)
-    # runid='A_pretrained'
+    experiment_dir = os.path.join(root_path, f'code/save/{experiment_dir}')
+    run_ids, run_types = read_from_json(experiment_dir, model_type)
     runid = run_ids[0]
-    with open(os.path.join(root_path, f'code/save/model_{model_type}/config_{runid}.json'),'r') as f:
+    with open(os.path.join(experiment_dir, f'config_{runid}.json'),'r') as f:
         config=json.load(f)
 
     # load the dataset
-    try:
-        func = eval(config['funcs'])
-    except:
-        func = lambda x: (x[0]+x[1])%C
     dataset = MyAddDataSet(
-                        func=eval(config['funcs']) if 'funcs' in config else lambda x: (x[0]+x[1])%C,
-                        C=config['C'] if 'C' in config else C,
-                        diff_vocab=config['diff_vocab'] if 'diff_vocab' in config else False,
-                        eqn_sign=config['eqn_sign'] if 'eqn_sign' in config else False,
+                        func=lambda x: (x[0]+x[1])%C,
+                        C=C,
+                        diff_vocab=False,
+                        eqn_sign=False,
                         device=DEVICE)
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
 
-    # initialize the model
     linear_models={'alpha':MyModelA,'beta':MyModelB,'gama':MyModelC,'delta':MyModelD,'x':MyModelX}
-    if not use_transformer:
-        model=linear_models[model_type]()
-    else:
-        model=Transformer(num_layers=config.get('n_layers',1),
-                num_heads=config['n_heads'],
-                d_model=config['d_model'],
-                d_head=config.get('d_head',config['d_model']//config['n_heads']),
-                attn_coeff=config['attn_coeff'],
-                d_vocab=dataset.vocab,
-                act_type=config.get('act_fn','relu'),
-                n_ctx=dataset.dim,)
-    model.to(DEVICE)
 
     # pre-generated sequence for gradient symmetricity test
     xs = random.Random(42).sample(list(itertools.product(range(C), repeat=3)), 100)
@@ -185,26 +170,50 @@ if __name__ == '__main__':
     gradient_symmetricities = []
     circularities = []
     distance_irrelevances = []
+    d_models = []
 
     for id, type in zip(run_ids, run_types):
-        print(f"\nLoading model {id}, {type}")
-        model_file=os.path.join(root_path, f'code/save/model_{model_type}/model_{id}.pt')
-        model.load_state_dict(torch.load(model_file, map_location=DEVICE))
-        grad_sym = gradient_symmetricity(model, xs)
-        circ = circularity(model, first_k=4)
-        dist_irr = distance_irrelevance(model, dataloader, show_plot=False)
-        print('Gradient Symmetricity', grad_sym)
-        print('Circularity', circ)
-        print('Distance Irrelevance', dist_irr)
-        with open(os.path.join(root_path, f'code/save/model_{model_type}/config_{id}.json'),'r') as f:
+
+        if verbose:
+            print(f"\nLoading model {id}, {type}")
+        
+        # initialize the model
+        model_file = os.path.join(experiment_dir, f'model_{id}.pt')
+        json_file = os.path.join(experiment_dir, f'config_{id}.json')
+        with open(json_file, 'r') as f:
             config = json.load(f)
             attn_coeffs.append(config['attn_coeff'] if 'attn_coeff' in config else 0)
-        gradient_symmetricities.append(grad_sym)
-        circularities.append(circ)
-        distance_irrelevances.append(dist_irr)
+            d_models.append(config['d_model'] if 'd_model' in config else 0)
+        
+            if model_type not in ['A', 'B']:
+                model=linear_models[model_type]()
+            else:
+                model=Transformer(num_layers=config.get('n_layers',1),
+                        num_heads=config['n_heads'],
+                        d_model=config['d_model'],
+                        d_head=config.get('d_head',config['d_model']//config['n_heads']),
+                        attn_coeff=config['attn_coeff'],
+                        d_vocab=dataset.vocab,
+                        act_type=config.get('act_fn','relu'),
+                        n_ctx=dataset.dim,)
+            model.to(DEVICE)
+            model.load_state_dict(torch.load(model_file, map_location=DEVICE))
+
+            grad_sym = gradient_symmetricity(model, xs=xs)
+            circ = circularity(model, first_k=4)
+            dist_irr = distance_irrelevance(model, dataloader, show_plot=False)
+            if verbose:
+                print('Gradient Symmetricity', grad_sym)
+                print('Circularity', circ)
+                print('Distance Irrelevance', dist_irr)
+            
+            gradient_symmetricities.append(grad_sym)
+            circularities.append(circ)
+            distance_irrelevances.append(dist_irr)
 
     # Create a DataFrame
     df = pd.DataFrame({
+        'Model Width': d_models,
         'Attn Coeff': attn_coeffs,
         'Gradient Symmetricity': gradient_symmetricities,
         'Circularity': circularities,
@@ -214,27 +223,58 @@ if __name__ == '__main__':
     # Create subplots
     fig, axes = plt.subplots(1, 2, figsize=(10, 4), constrained_layout=True)
 
-    # Plot the first scatter plot
-    sc1 = axes[0].scatter(df['Attn Coeff'], df['Distance Irrelevance'], 
-                        c=df['Gradient Symmetricity'], cmap='Oranges', edgecolor='k', s=40)
-    axes[0].set_xlabel("Attention Rate")
-    axes[0].set_ylabel("Distance Irrelevance")
-    axes[0].set_title("Gradient Symmetricity")
-    axes[0].set_xlim(-0.05, 1.05)
-    axes[0].set_ylim(0, 1)
-    cbar1 = fig.colorbar(sc1, ax=axes[0], orientation='horizontal', location="top")
-    cbar1.set_label("Distance Irrelevance")
+    if not varying_width:
+        # Plot the first scatter plot
+        sc1 = axes[0].scatter(df['Attn Coeff'], df['Distance Irrelevance'], 
+                            c=df['Gradient Symmetricity'], cmap='Oranges', edgecolor='k', s=40)
+        axes[0].set_xlabel("Attention Rate")
+        axes[0].set_ylabel("Distance Irrelevance")
+        # axes[0].set_title("Gradient Symmetricity")
+        axes[0].set_xlim(-0.05, 1.05)
+        axes[0].set_ylim(0, 1)
+        cbar1 = fig.colorbar(sc1, ax=axes[0], orientation='horizontal', location="top")
+        cbar1.set_label("Gradient Symmetricity")
 
-    # Plot the second scatter plot
-    sc2 = axes[1].scatter(df['Attn Coeff'], df['Gradient Symmetricity'], 
-                        c=df['Distance Irrelevance'], cmap='Oranges', edgecolor='k', s=40)
-    axes[1].set_xlabel("Attention Rate")
-    axes[1].set_ylabel("Gradient Symmetry")
-    axes[1].set_title("Distance Irrelevance")
-    axes[1].set_xlim(-0.05, 1.05)
-    axes[1].set_ylim(0, 1)
-    cbar2 = fig.colorbar(sc2, ax=axes[1], orientation='horizontal', location="top")
-    cbar2.set_label("Gradient Symmetry")
+        # Plot the second scatter plot
+        sc2 = axes[1].scatter(df['Attn Coeff'], df['Gradient Symmetricity'], 
+                            c=df['Distance Irrelevance'], cmap='Oranges', edgecolor='k', s=40)
+        axes[1].set_xlabel("Attention Rate")
+        axes[1].set_ylabel("Gradient Symmetry")
+        # axes[1].set_title("Distance Irrelevance")
+        axes[1].set_xlim(-0.05, 1.05)
+        axes[1].set_ylim(0, 1)
+        cbar2 = fig.colorbar(sc2, ax=axes[1], orientation='horizontal', location="top")
+        cbar2.set_label("Distance Irrelevance")
 
-    # Show plot
-    plt.savefig("output.png")
+        # Show plot
+        plt.savefig(os.path.join(root_path, f"result/rep_attn_coeff.png"))
+    else:
+        # Plot the first scatter plot
+        sc1 = axes[0].scatter(df['Attn Coeff'], df['Model Width'], 
+                            c=df['Gradient Symmetricity'], cmap='Oranges', edgecolor='k', s=40)
+        axes[0].set_xlabel("Attention Rate")
+        axes[0].set_ylabel("Model Width")
+        # axes[0].set_title("Gradient Symmetricity")
+        axes[0].set_xlim(-0.05, 1.05)
+        axes[0].set_ylim(24, 768)
+        axes[0].set_yscale('log')
+        axes[0].set_yticklabels(['32', '64', '128', '256', '512'])
+        cbar1 = fig.colorbar(sc1, ax=axes[0], orientation='horizontal', location="top")
+        cbar1.set_label("Gradient Symmetricity")
+
+        # Plot the second scatter plot
+        sc2 = axes[1].scatter(df['Attn Coeff'], df['Model Width'], 
+                            c=df['Distance Irrelevance'], cmap='Oranges', edgecolor='k', s=40)
+        axes[1].set_xlabel("Attention Rate")
+        axes[1].set_ylabel("Model Width")
+        # axes[1].set_title("Distance Irrelevance")
+        axes[1].set_xlim(-0.05, 1.05)
+        axes[1].set_ylim(24, 768)
+        axes[1].set_yscale('log')
+        axes[1].set_yticklabels(['32', '64', '128', '256', '512'])
+        cbar2 = fig.colorbar(sc2, ax=axes[1], orientation='horizontal', location="top")
+        cbar2.set_label("Distance Irrelevance")
+
+        # Show plot
+        plt.savefig(os.path.join(root_path, f"result/rep_varying_width.png"))
+

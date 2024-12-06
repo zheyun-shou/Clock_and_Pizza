@@ -1,9 +1,7 @@
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import torch.optim as optim
 import numpy as np
-import matplotlib.pyplot as plt
 import einops
 
 d_hidden=256
@@ -33,6 +31,7 @@ class MyModelD(nn.Module):
         return self.backdoor_h(x)[1]
     def forward(self,x):
         return self.forward_h(x)[1]
+
 class MyModelA(nn.Module):
     def __init__(self):
         super(MyModelA, self).__init__()
@@ -58,6 +57,7 @@ class MyModelA(nn.Module):
         return self.backdoor_h(x)[1]
     def forward(self,x):
         return self.forward_h(x)[1]
+
 class MyModelB(nn.Module):
     def __init__(self):
         super(MyModelB, self).__init__()
@@ -84,6 +84,7 @@ class MyModelB(nn.Module):
         return self.backdoor_h(x)[1]
     def forward(self,x):
         return self.forward_h(x)[1]
+
 class MyModelC(nn.Module):
     def __init__(self):
         super(MyModelC, self).__init__()
