@@ -543,28 +543,28 @@ import random
 import string
 import seaborn as sns
 
-for count in range(100):
+random.seed()
+torch.random.seed()
+
+step_size = 0.05
+for count in np.arange(0.30, 1.0, step_size):
     # for use_linear in [False]: # false model B, true model A
     letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
-    #run_name = 'A_repr_'.join(random.choices(letters_and_numbers, k=10))
-    # run_name = 'A_repr_trans_'+str(count+1)
-    attn_coeff=random.uniform(0,1)
-    run_name = f"B_{attn_coeff:.6f}"
-    print(run_name)
+    # attn_coeff = 1 - (count + random.uniform(0,step_size))
+    attn_coeff = (count + random.uniform(0,step_size))
+    # attn_coeff=1
     C=59
     n_layers=1
-    # if random.randint(0,3):
-    #     n_layers=random.randint(1,4)
-    # frac_coeff=0.8
     diff_vocab=0
     eqn_sign=0
     # if random.randint(0,4)==0:
     #     diff_vocab=random.randint(0,1)
     #     eqn_sign=random.randint(0,1)
     d_model=128
-    # if random.randint(0,2)==0:
-    #     d_model=int(2**random.uniform(5,9))
-    print(f'd={d_model}')
+    d_model=int(2**random.uniform(7.1,9))
+    # run_name = 'A_repr_trans_'+str(count+1)
+    run_name = f"B_d_{d_model}_attn_{attn_coeff:.6f}"
+    print(run_name)
     config=dict(
         name='modadd_'+str(C),
         funcs='lambda x: (x[0]+x[1])%'+str(C),
