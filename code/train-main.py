@@ -554,18 +554,16 @@ for count in range(0,10):
     print(run_name)
     C=59
     n_layers=1
-    # if random.randint(0,3):
-    #     n_layers=random.randint(1,4)
-    # frac_coeff=0.8
     diff_vocab=0
     eqn_sign=0
     # if random.randint(0,4)==0:
     #     diff_vocab=random.randint(0,1)
     #     eqn_sign=random.randint(0,1)
     d_model=128
-    # if random.randint(0,2)==0:
-    #     d_model=int(2**random.uniform(5,9))
-    print(f'd={d_model}')
+    d_model=int(2**random.uniform(7.1,9))
+    # run_name = 'A_repr_trans_'+str(count+1)
+    run_name = f"B_d_{d_model}_attn_{attn_coeff:.6f}"
+    print(run_name)
     config=dict(
         name='modadd_'+str(C),
         funcs='lambda x: (x[0]+x[1])%'+str(C),
