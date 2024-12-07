@@ -11,7 +11,7 @@ def extract_embeddings(model):
     if hasattr(model, 'embed'):
         if hasattr(model.embed, 'W_E'): 
             # linear / standard transformer (model A/B)
-            e = model.embed.W_E.cpu().detach().numpy()
+            e = model.embed.W_E.cpu().detach().numpy().T
         elif hasattr(model.embed, 'weight'):
             # model a/b/c/d
             e = model.embed.weight.data.cpu().detach().numpy()
@@ -21,11 +21,11 @@ def extract_embeddings(model):
         e2 = model.embed2.weight.cpu().detach().numpy()
     if hasattr(model, 'pos_embed'): 
         # standard transformer (model B)
-        e_pos = model.pos_embed.W_pos.cpu().detach().numpy()
+        e_pos = model.pos_embed.W_pos.cpu().detach().numpy().T
     if hasattr(model, 'unembed'):
         if hasattr(model.unembed, 'W_U'):  
             # linear / standard transformer (model A/B)
-            e_u = model.unembed.W_U.cpu().detach().numpy()
+            e_u = model.unembed.W_U.cpu().detach().numpy().T
         elif hasattr(model.unembed, 'weight'):
             # model a/b/c/d/x
             e_u = model.unembed.weight.data.cpu().detach().numpy()

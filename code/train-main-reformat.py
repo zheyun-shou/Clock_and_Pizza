@@ -29,10 +29,10 @@ import wandb
 root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(root_path)
 
-from analysis.multi_model_analysis import distance_irrelevance, gradient_symmetricity, circularity
+from analysis.model_analysis import distance_irrelevance, gradient_symmetricity, circularity
 from analysis.utils import extract_embeddings
-from analysis.model import Transformer
-from analysis.dataset import MyAddDataSet
+from analysis.models import Transformer
+from analysis.datasets import MyAddDataSet
 
 DEVICE='cuda' if torch.cuda.is_available() else 'cpu'
 print(DEVICE)
@@ -175,7 +175,7 @@ def run_experiment(config):
                 if acc.item()==1. and perfect_train_time is None:
                     perfect_train_time = i
                 gaps.append(best_train_acc-best_test_acc)
-                pbar.set_description(f"loss: {loss.item():.3f}, norm: {norm:.3f}, acc: {acc.item():.3f}")
+                pbar.set_description(f"loss: {loss.item():.3g}, acc: {acc.item():.3f}, vloss: {loss_val:.3g}, vacc: {acc_val:.3f}, norm: {norm:.3f}")
                 # pbar.set_description(f"loss: {loss.item():.3f}, accm: {best_train_acc:.3f}, vloss: {loss_val:.3f}, vaccm: {best_test_acc:.3f}, norm: {norm:.3f}, acc: {acc.item():.3f}, vacc: {acc_val:.3f}")
                 run.log({'training_loss': loss.item(),
                 'validation_loss': loss_val,
@@ -230,14 +230,13 @@ import json
 
 random.seed()
 torch.random.seed()
-torch.set_num_threads(16)
 
 if __name__ == '__main__':
-    step_size = 0.025
-    experiment_name = 'attn_width'
-    for count in np.arange(0.40, 0.90, step_size):
+    step_size = 0.01
+    experiment_name = 'attn_varywidth'
+    for count in np.arange(0.8, 0.9, step_size):
         letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
-        attn_coeff = 1 - (count + random.uniform(0,step_size))
+        attn_coeff = (count + random.uniform(0,step_size))
         C=59
         n_layers=1
         diff_vocab=0
@@ -292,10 +291,9 @@ if __name__ == '__main__':
         # save config
         with open(os.path.join(experiment_path, f'config_{run_name}.json'),'w') as f:
             config['func']=None
-            if config['save_analysis']:
-                config['dist_irr']=dd
-                config['grad_sym']=grad_sym
-                config['circ']=circ
+            config['dist_irr']=dd
+            config['grad_sym']=grad_sym
+            config['circ']=circ
             json.dump(config,f,separators=(',\n', ': '))
 
         # summary for wandb
