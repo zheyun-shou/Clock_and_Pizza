@@ -543,13 +543,14 @@ import random
 import string
 import seaborn as sns
 
-for count in range(100):
+for count in range(0,10):
     # for use_linear in [False]: # false model B, true model A
     letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
     #run_name = 'A_repr_'.join(random.choices(letters_and_numbers, k=10))
-    # run_name = 'A_repr_trans_'+str(count+1)
-    attn_coeff=random.uniform(0,1)
-    run_name = f"B_{attn_coeff:.6f}"
+    run_name = 'B'+str(count+1)
+    #attn_coeff=random.uniform(0,1)
+    attn_coeff=1
+    #run_name = f"B_{attn_coeff:.6f}"
     print(run_name)
     C=59
     n_layers=1

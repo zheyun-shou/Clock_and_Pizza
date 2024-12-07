@@ -28,8 +28,8 @@ C=59
 DEVICE='cpu'
 
 # model type
-model_type='gama'
-suffix='_repr_'
+model_type='B'
+suffix=''
 use_transformer = False
 
 assert model_type in ['A', 'B', 'alpha', 'beta', 'gama', 'delta', 'x']
