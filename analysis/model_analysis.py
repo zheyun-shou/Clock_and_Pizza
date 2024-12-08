@@ -11,6 +11,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from tqdm import tqdm
+from copy import deepcopy
 
 # ignore warning
 import warnings
@@ -21,7 +22,7 @@ root_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(root_path)
 
 from analysis.utils import extract_embeddings
-from analysis.datasets import MyAddDataSet
+from analysis.datasets import MyAddDataSet, MyDataset
 from analysis.models import MyModelA, MyModelB, MyModelC, MyModelD, MyModelX, Transformer
 
 # constants
@@ -55,20 +56,73 @@ def read_from_json(directory, model_type=None):
                             run_ids.append(filename[len('config_'):-len('.json')])
     return run_ids, run_types
 
+def embedding_gradient(model, model_type, xs=None):
+    tt=0
+    _model = deepcopy(model)
+    device = next(_model.parameters()).device
+
+    if xs is None:
+        xs = random.sample(list(itertools.product(range(C), repeat=3)), 100)
+    
+    # now use scikit PCA to reduce the dimensionality of the embedding
+    from sklearn.decomposition import PCA
+    pca = PCA(n_components=20)
+    pts = []
+    for ii in range(6):
+        we=model.embed.W_E.T.detach().cpu().numpy()
+        we2=pca.fit_transform(we)
+        # set numbers in we2 with index is not equal to ii to 0
+
+        we2[:, np.arange(we2.shape[1]) != ii] = 0
+
+        we3=pca.inverse_transform(we2)
+        model.embed.W_E.data=torch.tensor(we3.T).to(model.embed.W_E.device)
+
+        
+        for abc in xs:
+            a,b,c=abc
+            x=torch.tensor([[a,b]],device=device)
+            t,o0=_model.forward_h(x)
+            _model.zero_grad()
+            #print(a,b,c)
+            try: # for transformer
+                _model.remove_all_hooks()
+                o=o0[0,-1,:]
+            except: # for linear models
+                o=o0[0,:]
+            
+            t.retain_grad()
+            o[c].backward(retain_graph=True)
+            tg=t.grad[0].detach().cpu().numpy() # target gradient
+            #tt+=tg[0][0]
+            pts.append((tg[0].sum(), tg[1].sum()))
+    pts = np.array(pts)
+    # plot and save
+    plt.figure(dpi=300)
+    plt.scatter(pts[:,0], pts[:,1], c='r' if model_type == 'A' else 'b')
+    plt.xlabel(r"Gradients on $E_a$")
+    plt.ylabel(r"Gradients on $E_b$")
+    plt.xlim(-50, 50)
+    plt.ylim(-50, 50)
+    plt.title('Embedding Gradient')
+    plt.savefig(os.path.join(root_path, f"result/rep_model_{model_type}_embedding_gradient.png"))
+    return pts
+
 def gradient_symmetricity(model, xs=None):
     tt=0
-    device = next(model.parameters()).device
+    _model = deepcopy(model)
+    device = next(_model.parameters()).device
 
     if xs is None:
         xs = random.sample(list(itertools.product(range(C), repeat=3)), 100)
     for abc in xs:
         a,b,c=abc
         x=torch.tensor([[a,b]],device=device)
-        t,o0=model.forward_h(x)
-        model.zero_grad()
+        t,o0=_model.forward_h(x)
+        _model.zero_grad()
         #print(a,b,c)
         try: # for transformer
-            model.remove_all_hooks()
+            _model.remove_all_hooks()
             o=o0[0,-1,:]
         except: # for linear models
             o=o0[0,:]
@@ -147,7 +201,10 @@ def distance_irrelevance(model, dataloader, show_plot=False, get_logits=False, t
     else:
         return dd
 
-def run_model_analysis(experiment_name, model_type, verbose=False):
+def run_model_analysis(experiment_name, model_type, save_dataframe=True, save_config=False, check_embed_gradient=False, verbose=False):
+    
+    print("Running model analysis for", experiment_name, "and model type", model_type, "with: \n save_dataframe:", save_dataframe, "\n save_config:", save_config, "\n check_embed_gradient:", check_embed_gradient, "\n verbose:", verbose)
+
     assert model_type in ['A', 'B', 'alpha', 'beta', 'gama', 'delta', 'x'], "Invalid model type!"
     experiment_dir = os.path.join(root_path, f'code/save/{experiment_name}')
     run_ids, run_types = read_from_json(experiment_dir, model_type)
@@ -156,12 +213,15 @@ def run_model_analysis(experiment_name, model_type, verbose=False):
         config=json.load(f)
 
     # load the dataset
-    dataset = MyAddDataSet(
-                        func=lambda x: (x[0]+x[1])%C,
-                        C=C,
-                        diff_vocab=False,
-                        eqn_sign=False,
-                        device=DEVICE)
+    if model_type in ['A', 'B']:
+        dataset = MyAddDataSet(C=C,
+                            func=lambda x: (x[0]+x[1])%C,
+                            diff_vocab=False,
+                            eqn_sign=False,
+                            device=DEVICE)
+    else:
+        dataset = MyDataset(n_vocab=C, device=DEVICE)
+    
     dataloader = torch.utils.data.DataLoader(dataset, batch_size=C*C)
 
     linear_models={'alpha':MyModelA,'beta':MyModelB,'gama':MyModelC,'delta':MyModelD,'x':MyModelX}
@@ -171,19 +231,17 @@ def run_model_analysis(experiment_name, model_type, verbose=False):
 
     configs = []
 
-    for id, type in tqdm(zip(run_ids, run_types), total=len(run_ids)):
+    for run_id, run_type in tqdm(zip(run_ids, run_types), total=len(run_ids)):
 
         if verbose:
-            print(f"\nLoading model {id}, {type}")
+            print(f"\nLoading model {run_id}, {run_type}")
         
         # initialize the model
-        model_file = os.path.join(experiment_dir, f'model_{id}.pt')
-        json_file = os.path.join(experiment_dir, f'config_{id}.json')
+        model_file = os.path.join(experiment_dir, f'model_{run_id}.pt')
+        json_file = os.path.join(experiment_dir, f'config_{run_id}.json')
         with open(json_file, 'r') as f:
             config = json.load(f)
-            if model_type not in ['A', 'B']:
-                model=linear_models[model_type]()
-            else:
+            if model_type in ['A', 'B']:
                 model=Transformer(num_layers=config.get('n_layers',1),
                         num_heads=config['n_heads'],
                         d_model=config['d_model'],
@@ -192,12 +250,17 @@ def run_model_analysis(experiment_name, model_type, verbose=False):
                         d_vocab=dataset.vocab,
                         act_type=config.get('act_fn','relu'),
                         n_ctx=dataset.dim,)
+            else:
+                model=linear_models[model_type]()
             model.to(DEVICE)
             model.load_state_dict(torch.load(model_file, map_location=DEVICE))
 
             grad_sym = gradient_symmetricity(model, xs=xs)
             circ = circularity(model, first_k=4)
             dist_irr = distance_irrelevance(model, dataloader, show_plot=False)
+            # only do this with the first model and check_embed_gradient=True
+            if check_embed_gradient and model_type in ['A', 'B'] and run_id == run_ids[0]:
+                pts = embedding_gradient(model, model_type, xs=xs)
             if verbose:
                 print('Gradient Symmetricity', grad_sym)
                 print('Circularity', circ)
@@ -209,16 +272,30 @@ def run_model_analysis(experiment_name, model_type, verbose=False):
 
     # Create a DataFrame
     df = pd.DataFrame(configs)
-    columns_to_remove = ['name', 'funcs', 'C', 'func', 'epoch']
-    df.drop(columns=columns_to_remove, inplace=True)
+    try:
+        columns_to_remove = ['C', 'func', 'epoch']
+        df.drop(columns=columns_to_remove, inplace=True)
+    except:
+        pass
 
     result_dir = os.path.join(root_path, f'result/{experiment_name}')
     if not os.path.exists(result_dir):
         os.makedirs(result_dir)
-    df.to_csv(os.path.join(result_dir, f"results_{experiment_name}.csv"))
+
+    if save_dataframe:
+        df.to_csv(os.path.join(result_dir, f"results_{experiment_name}.csv"))
+
+    if save_config:
+        for run_id, config in zip(run_ids, configs):
+            with open(os.path.join(experiment_dir, f'config_{run_id}.json'),'w') as f:
+                json.dump(config, f, separators=(',\n', ': '))
 
 
 if __name__ == '__main__':
     model_type='B'
-    experiment_name='attn_fixedwidth'
-    run_model_analysis(experiment_name, model_type, verbose=False)
+    experiment_name='model_B_embeddings'
+    run_model_analysis(experiment_name, model_type, 
+                       save_dataframe=False, 
+                       save_config=True, 
+                       check_embed_gradient=True, 
+                       verbose=False)

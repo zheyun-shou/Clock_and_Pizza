@@ -103,8 +103,8 @@ def run_linear_experiments(config):
         run=run
     )
 
-model_type = 'alpha' # ['alpha', 'beta', 'gamma', 'delta', 'x']
-assert model_type in ['alpha', 'beta', 'gamma', 'delta', 'x']
+model_type = 'x' # ['alpha', 'beta', 'gama', 'delta', 'x']
+assert model_type in ['alpha', 'beta', 'gama', 'delta', 'x']
 experiment_name = f'model_{model_type}_embeddings'
 
 for count in range(0,5):
@@ -125,7 +125,7 @@ for count in range(0,5):
         weight_decay=2.,
         frac=0.8,
         runid=run_name,
-        save_embeddings=True,
+        save_embeddings=False,
     )
     print(config)
     result_modadd = run_linear_experiments(config)
@@ -151,17 +151,19 @@ for count in range(0,5):
         np.savez_compressed(os.path.join(experiment_path, f'embeddings_{run_name}.npz'), result_modadd['embeddings'])
     
     # model analysis
-    model.to('cpu')
-    grad_sym = gradient_symmetricity(model, xs=None)
-    circ = circularity(model, first_k=4)
-    oo, dd = distance_irrelevance(model, dataloader, show_plot=False, get_logits=True)
+    if model_type != 'x':
+        model.to('cpu')
+        grad_sym = gradient_symmetricity(model, xs=None)
+        circ = circularity(model, first_k=4)
+        oo, dd = distance_irrelevance(model, dataloader, show_plot=False, get_logits=True)
 
     # save config
     with open(os.path.join(experiment_path, f'config_{run_name}.json'),'w') as f:
         config['func']=None
-        config['dist_irr']=dd
-        config['grad_sym']=grad_sym
-        config['circ']=circ
+        if model_type != 'x':
+            config['dist_irr']=dd
+            config['grad_sym']=grad_sym
+            config['circ']=circ
         json.dump(config,f,separators=(',\n', ': '))
 
     # summary for wandb

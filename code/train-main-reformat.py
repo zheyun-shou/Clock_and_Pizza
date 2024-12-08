@@ -1,27 +1,19 @@
 # adapted from https://colab.research.google.com/drive/1F6_1_cWXE5M7WocUcpQWp3v8z4b1jL20 (https://arxiv.org/abs/2301.05217), thanks!
 
 import torch
-import torch.nn as nn
 import torch.nn.functional as F
 import torch.optim as optim
 import numpy as np
-import einops
 import tqdm
 
 import random
-import time
-
-from pathlib import Path
-import pickle
+from copy import deepcopy
 import os
 import sys
 
 from torch.utils.data import DataLoader
 
 from functools import *
-import pandas as pd
-
-# import comet_ml
 import wandb
 
 
@@ -71,6 +63,7 @@ def run_experiment(config):
     train_dataset, test_dataset = torch.utils.data.random_split(full_dataset, [train_size, test_size])
     print('random split',len(train_dataset),len(test_dataset))
     batch_size = config.get('batch_size',len(full_dataset))
+    dataloader = torch.utils.data.DataLoader(full_dataset, batch_size=C*C)
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=False)
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
@@ -90,6 +83,7 @@ def run_experiment(config):
 
     # modification start here
     embeddings, grad_syms, circs, dist_irrs = [], [], [], []
+    grad_sym, circ, dist_irr = None, None, None
 
     pbar = tqdm.tqdm(range(config.get('epoch',10000)))
     gaps=[]
@@ -100,6 +94,7 @@ def run_experiment(config):
     early_stop_timer=0
     #model.train()
     run = wandb.init(reinit=True,config=config,project='modadd_longer')
+    run.name = config['runid']
     try:
         for i in pbar:
             def evaluation():
@@ -156,14 +151,19 @@ def run_experiment(config):
                 norm = sum([torch.sum(p*p).item() for p in model.parameters()])**0.5
                 #sum(p.norm()**2 for p in model.parameters()).sqrt().item()
 
-                # save every 10 epochs
-                if i % 10 == 0:
+                # save every 50 epochs
+                if i % 50 == 0:
                     if config['save_embeddings']:
-                        embeddings.append(extract_embeddings(model))
+                        experiment_path = os.path.join(root_path, f'code/save/{experiment_name}')
+                        torch.save(model.state_dict(), os.path.join(experiment_path, f'model_{run_name}_epoch_.pt'))
+                        # embeddings.append(extract_embeddings(model))
                     if config['save_analysis']:
-                        grad_syms.append(gradient_symmetricity(model, xs=None))
-                        circs.append(circularity(model, first_k=4))
-                        dist_irrs.append(distance_irrelevance(model, dataloader, show_plot=False))
+                        grad_sym = gradient_symmetricity(model, xs=None)
+                        circ = circularity(model, first_k=4)
+                        dist_irr = distance_irrelevance(model, dataloader, show_plot=False)
+                        grad_syms.append(grad_sym)
+                        circs.append(circ)
+                        dist_irrs.append(dist_irr)
                 
                 losses.append(loss.item())
                 accs.append(acc.item())
@@ -177,7 +177,7 @@ def run_experiment(config):
                 gaps.append(best_train_acc-best_test_acc)
                 pbar.set_description(f"loss: {loss.item():.3g}, acc: {acc.item():.3f}, vloss: {loss_val:.3g}, vacc: {acc_val:.3f}, norm: {norm:.3f}")
                 # pbar.set_description(f"loss: {loss.item():.3f}, accm: {best_train_acc:.3f}, vloss: {loss_val:.3f}, vaccm: {best_test_acc:.3f}, norm: {norm:.3f}, acc: {acc.item():.3f}, vacc: {acc_val:.3f}")
-                run.log({'training_loss': loss.item(),
+                log = {'training_loss': loss.item(),
                 'validation_loss': loss_val,
                 'training_accuracy': acc.item(),
                 'validation_accuracy': acc_val,
@@ -186,12 +186,22 @@ def run_experiment(config):
                 'best_test_accuracy': best_test_acc,
                 'generalization_gap': best_train_acc-best_test_acc,
                 'generalization_delay1': sum(gaps),
-                })
+                }
                 if config['save_analysis']:
-                    run.log({'gradient_symmetricity': grad_syms[-1],
-                    'circularity': circs[-1],
-                    'distance_irrelevance': dist_irrs[-1]
-                    })
+                    log = {'training_loss': loss.item(),
+                    'validation_loss': loss_val,
+                    'training_accuracy': acc.item(),
+                    'validation_accuracy': acc_val,
+                    'parameter_norm': norm,
+                    'best_train_accuracy': best_train_acc,
+                    'best_test_accuracy': best_test_acc,
+                    'generalization_gap': best_train_acc-best_test_acc,
+                    'generalization_delay1': sum(gaps),
+                    'gradient_symmetricity': grad_sym,
+                    'circularity': circ,
+                    'distance_irrelevance': dist_irr
+                    }
+                run.log(log)
 
     except KeyboardInterrupt:
         print('Keyboard interrupt. Gracefully exiting...')
@@ -232,17 +242,16 @@ random.seed()
 torch.random.seed()
 
 if __name__ == '__main__':
-    step_size = 0.01
-    experiment_name = 'attn_varywidth'
-    for count in np.arange(0.8, 0.9, step_size):
-        letters_and_numbers = string.ascii_lowercase + string.digits.replace('0', '')
-        attn_coeff = (count + random.uniform(0,step_size))
+    experiment_name = 'model_B_checkpoints'
+    for count in range(5):
+        attn_coeff = 1
         C=59
         n_layers=1
         diff_vocab=0
         eqn_sign=0
         d_model=int(2**random.uniform(5,9))
-        run_name = f"B_d_{d_model}_attn_{attn_coeff:.6f}"
+        run_name = f"B_{count+1}"
+        # run_name = f"B_d_{d_model}_attn_{attn_coeff:.6f}"
         print(run_name)
         config=dict(
             name='modadd_'+str(C),
@@ -263,8 +272,10 @@ if __name__ == '__main__':
             runid=run_name,
             diff_vocab=diff_vocab,
             eqn_sign=eqn_sign,
-            save_embeddings=False,
-            save_analysis=False,
+            save_embeddings=True,
+            save_analysis=True,
+            # save_embeddings=False,
+            # save_analysis=False,
         )
         result_modadd=run_experiment(config)
 

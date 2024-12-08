@@ -11,5 +11,5 @@
 "save_embeddings": true,
 "func": null,
 "dist_irr": 0.3877789545450461,
-"grad_sym": 1.0000000023841857,
+"grad_sym": 1.0000000047683715,
 "circ": 0.734504216259808}
